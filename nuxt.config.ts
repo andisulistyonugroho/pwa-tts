@@ -7,6 +7,23 @@ export default defineNuxtConfig({
   },
   ssr: false,
   modules: ['vuetify-nuxt-module', '@vite-pwa/nuxt'],
+  pwa: {
+    manifest: {
+      name: 'SIROHIFY',
+      short_name: 'Sirohify',
+      description: 'sirohify',
+      background_color: '#000000',
+      theme_color: '#000000',
+    },
+    workbox: {
+      navigateFallback: '/',
+    },
+    devOptions: {
+      suppressWarnings: true,
+      enabled: true,
+      type: 'module'
+    }
+  },
   vuetify: {
     moduleOptions: {
       /* module specific options */
