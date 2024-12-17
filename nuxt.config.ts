@@ -2,11 +2,13 @@
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
-  devServer:{
-    port:8080
+  devServer: {
+    port: 8080
   },
   ssr: false,
-  modules: ['vuetify-nuxt-module', '@vite-pwa/nuxt'],
+  modules: ['vuetify-nuxt-module',
+    '@vite-pwa/nuxt'
+  ],
   pwa: {
     manifest: {
       name: 'SIROHIFY',
