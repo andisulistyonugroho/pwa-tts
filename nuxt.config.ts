@@ -3,6 +3,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
   devServer: {
+    host: '0.0.0.0',
     port: 8080
   },
   ssr: false,
@@ -71,8 +72,8 @@ export default defineNuxtConfig({
       short_name: 'Soal Siroh',
       name: 'Soal Siroh: biar ga lupa sejarah',
       description: 'Soal Siroh',
-      background_color: '#000000',
-      theme_color: '#000000',
+      background_color: '#00bcd4',
+      theme_color: '#00bcd4',
       icons: [
         {
           src: 'splash_screens/icon.png',
