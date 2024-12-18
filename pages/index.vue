@@ -8,10 +8,10 @@ definePageMeta({
     <v-row style="height:100vh;" align="center" justify="center">
       <v-col cols="12" md="8">
         <div class="text-h2 text-center">
-          Teka Teki Siroh
+          Soal Siroh
         </div>
         <div class="text-center">
-          jelajahi sejarah temukan hikmah
+          biar ga lupa sejarah
         </div>
         <v-img src="/logo.svg" max-height="300" contain />
       </v-col>
