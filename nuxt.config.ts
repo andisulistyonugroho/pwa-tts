@@ -70,10 +70,17 @@ export default defineNuxtConfig({
     }
   },
   css: ['@/assets/main.scss'],
+  runtimeConfig: {
+    public: {
+      apiBase: process.env.BASE_URL || 'http://localhost:3000/api/',
+    },
+  },
   modules: [
     'vuetify-nuxt-module',
     '@vite-pwa/nuxt',
-    'dayjs-nuxt'
+    'dayjs-nuxt',
+    '@pinia/nuxt',
+    'pinia-plugin-persistedstate/nuxt',
   ],
   pwa: {
     strategies: 'generateSW',
