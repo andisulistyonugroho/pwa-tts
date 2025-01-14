@@ -4,16 +4,16 @@ definePageMeta({
 })
 </script>
 <template>
-  <v-container fluid class="bg-cyan lighten-5">
-    <v-row style="height:100vh;" align="center" justify="center">
+  <v-container fluid class="bg-cyan fill-height">
+    <v-row>
       <v-col cols="12" md="8">
         <div class="text-h2 text-center">
-          Soalium
+          Teka Teki Siroh
         </div>
-        <div class="text-center">
-          diulang biar ga lupa
+        <div class="text-h6 text-center">
+          Diulang biar ga lupa
         </div>
-        <v-img src="/logo.svg" max-height="300" contain />
+        <v-img src="/logo.svg" max-height="400" contain />
       </v-col>
       <v-col cols="12" md="4">
         <v-btn block size="x-large" variant="flat" color="purple darken-1 white--text" to="/topics">

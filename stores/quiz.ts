@@ -12,8 +12,16 @@ export const useQuizStore = defineStore('quiz', () => {
   }
   const topics = ref<Topic[]>([])
   const questionMode = ref('quick')
-  const quizzes = ref([])
-  const quizDetail = ref({})
+
+  type Quiz = {
+    id: number,
+    desc: string,
+    title: string,
+    num_of_level: number,
+    topicsId: number
+  }
+  const quizzes = ref<Quiz[]>([])
+  const quizDetail = ref<Quiz>()
 
   const getQuizzes = (async () => {
     try {

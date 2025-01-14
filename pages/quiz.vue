@@ -5,17 +5,17 @@ definePageMeta({
 
 const { $bus } = useNuxtApp()
 
-const { getTopics } = useQuizStore()
-const { topics } = storeToRefs(useQuizStore())
+const { getQuizzes } = useQuizStore()
+const { quizzes } = storeToRefs(useQuizStore())
 
-$bus.$emit('set-header', 'Topik')
-await getTopics()
+$bus.$emit('set-header', 'Quiz')
+await getQuizzes()
 </script>
 <template>
   <v-container>
     <v-row>
-      <v-col v-for="row in topics" cols="12">
-        <v-card rounded="lg" class="px-3 py-4 mb-2" :to="`/quiz?tid=${row.id}`">
+      <v-col v-for="row in quizzes" cols="12" class="pb-0">
+        <v-card rounded="lg" class="px-3 py-4">
           <v-row class="flex-nowrap" no-gutters>
             <v-col cols="11" class="flex-grow-1 flex-shrink-0">
               <v-icon>mdi-bookshelf</v-icon>&nbsp;
