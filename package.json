@@ -11,12 +11,17 @@
   },
   "dependencies": {
     "@vite-pwa/nuxt": "^0.10.6",
+    "axios": "^1.7.9",
+    "dayjs-nuxt": "^2.1.11",
+    "lodash.debounce": "^4.0.8",
+    "mitt": "^3.0.1",
     "nuxt": "^3.14.1592",
     "vue": "latest",
     "vue-router": "latest",
     "vuetify-nuxt-module": "^0.18.3"
   },
   "devDependencies": {
+    "sass": "^1.83.3",
     "typescript": "^5.7.2"
   }
 }
