@@ -5,13 +5,13 @@ definePageMeta({
 
 const { $bus, $debounce } = useNuxtApp()
 
-const { getTopics, getQuizById } = useQuizStore()
+const { getTopics } = useQuizStore()
 const { topics, topicDetail } = storeToRefs(useQuizStore())
 
 $bus.$emit('set-header', 'Topik')
 await getTopics()
 
-const openQuiz = $debounce(async (input: {
+const openTopic = $debounce(async (input: {
   id: number;
   title: string
 }) => {
@@ -27,7 +27,7 @@ const openQuiz = $debounce(async (input: {
   <v-container>
     <v-row>
       <v-col v-for="row in topics" cols="12">
-        <v-card rounded="lg" class="px-3 py-4 mb-2" @click="openQuiz(row)">
+        <v-card rounded="lg" class="px-3 py-4 mb-2" @click="openTopic(row)">
           <v-row class="flex-nowrap" no-gutters>
             <v-col cols="11" class="flex-grow-1 flex-shrink-0 text-h6">
               {{ row.title }}
