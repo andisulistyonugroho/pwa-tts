@@ -3,15 +3,15 @@
 // computed()s become getters
 // function()s become actions
 
-export const useQuestionStore = defineStore('question',() => {
-  const {$api} = useNuxtApp()
+export const useQuestionStore = defineStore('question', () => {
+  const { $api } = useNuxtApp()
 
   const questions = ref([])
   const numOfQuestion = ref(0)
-  
-  const getQuestionsByLevel = (async (payload:{quizId: Number, level: Number}) => {
+
+  const getQuestionsByLevel = (async (payload: { quizId: number, level: number }) => {
     try {
-      const {data} = await $api.get('/Questions',{
+      const { data } = await $api.get('/Questions', {
         params: {
           filter: {
             where: {
@@ -32,5 +32,5 @@ export const useQuestionStore = defineStore('question',() => {
     }
   })
 
-  return {getQuestionsByLevel, questions, numOfQuestion}
+  return { getQuestionsByLevel, questions, numOfQuestion }
 })
