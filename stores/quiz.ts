@@ -48,9 +48,14 @@ export const useQuizStore = defineStore('quiz', () => {
       })
       quizzes.value = data
 
-      const found = isDone.value.findIndex(obj => obj.quizId === quizDetail.value.id)
-      if (found <= 0) {// not found
-        isDone.value.push({ quizId: quizDetail.value.id, questionLevel: [1] })
+      if (topicDetail.value.id < 1 || data.length < 1) {
+        return Promise.resolve()
+      }
+
+      const found = isDone.value.findIndex(obj => obj.quizId === data[0].id)
+      console.log('found:', found)
+      if (found < 0) {// not found
+        isDone.value.push({ quizId: data[0].id, questionLevel: [1] })
       }
 
       return Promise.resolve(data)

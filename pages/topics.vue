@@ -8,9 +8,6 @@ const { $bus, $debounce } = useNuxtApp()
 const { getTopics } = useQuizStore()
 const { topics, topicDetail } = storeToRefs(useQuizStore())
 
-$bus.$emit('set-header', 'Topik')
-await getTopics()
-
 const openTopic = $debounce(async (input: {
   id: number;
   title: string
@@ -22,6 +19,9 @@ const openTopic = $debounce(async (input: {
     alert(error)
   }
 }, 1000, { leading: true, trailing: false })
+
+$bus.$emit('set-header', 'Topik')
+await getTopics()
 </script>
 <template>
   <v-container>
