@@ -11,6 +11,8 @@ export const useQuizStore = defineStore('quiz', () => {
     title: string
   }
   const topics = ref<Topic[]>([])
+  const topicDetail = ref<Topic>({ id: 0, title: '' })
+
   const questionMode = ref('quick')
 
   type Quiz = {
@@ -21,18 +23,35 @@ export const useQuizStore = defineStore('quiz', () => {
     topicsId: number
   }
   const quizzes = ref<Quiz[]>([])
-  const quizDetail = ref<Quiz>()
+  const quizDetail = ref<Quiz>({
+    id: 0,
+    desc: '',
+    title: '',
+    num_of_level: 0,
+    topicsId: 0
+  })
+
+  type CompletedQuiz = {
+    quizId: number,
+    questionLevel: number[]
+  }
+  const isDone = ref<CompletedQuiz[]>([])
 
   const getQuizzes = (async () => {
     try {
       const { data } = await $api.get('/Quizzes', {
         params: {
           filter: {
-            where: { is_active: true }
+            where: { topicsId: topicDetail.value.id, is_active: true }
           }
         }
       })
       quizzes.value = data
+
+      const found = isDone.value.findIndex(obj => obj.quizId === quizDetail.value.id)
+      if (found <= 0) {// not found
+        isDone.value.push({ quizId: quizDetail.value.id, questionLevel: [1] })
+      }
 
       return Promise.resolve(data)
     } catch (error) {
@@ -40,7 +59,7 @@ export const useQuizStore = defineStore('quiz', () => {
     }
   })
 
-  const getQuizById = (async (id: String) => {
+  const getQuizById = (async (id: number) => {
     try {
       const { data } = await $api.get(`/Quizzes/${id}`, {
         params: {
@@ -82,5 +101,10 @@ export const useQuizStore = defineStore('quiz', () => {
       return Promise.reject(error)
     }
   })
-  return { getQuizzes, getQuizById, deleteAccount, getTopics, quizzes, quizDetail, questionMode, topics }
+  return { getQuizzes, getQuizById, deleteAccount, getTopics, quizzes, quizDetail, questionMode, topics, topicDetail, isDone }
+}, {
+  persist: {
+    storage: piniaPluginPersistedstate.localStorage(),
+    key: 'pwtts'
+  }
 })

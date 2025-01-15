@@ -22,7 +22,7 @@ onBeforeUnmount(() => {
 
       <v-app-bar-title>{{ title }}</v-app-bar-title>
     </v-app-bar>
-    <v-main class="bg-cyan-lighten-4">
+    <v-main class="bg-cyan-lighten-5">
       <slot />
     </v-main>
   </v-app>
