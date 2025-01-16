@@ -29,7 +29,7 @@ await getQuizzes()
     <v-row>
       <v-col cols="12" class="text-center text-h5">{{ topicDetail.title }}</v-col>
       <v-col v-for="row in quizzes" cols="12" class="pb-0">
-        <v-card v-if="quizIsOpen(row.id)" rounded="lg" class="px-3 py-4" @click="openQuiz(row.id)">
+        <v-card v-if="quizIsOpen(row.id)" rounded="lg" class="px-3 py-4 bg-yellow" @click="openQuiz(row.id)">
           <v-row class="flex-nowrap" no-gutters>
             <v-col cols="10" class="flex-grow-1 flex-shrink-0 text-h6">
               {{ row.title }}
@@ -42,7 +42,7 @@ await getQuizzes()
             </v-col>
           </v-row>
         </v-card>
-        <v-card v-else rounded="lg" class="px-3 py-4">
+        <v-card v-else rounded="lg" class="px-3 py-4 bg-grey-lighten-2">
           <v-row class="flex-nowrap" no-gutters>
             <v-col cols="10" class="flex-grow-1 flex-shrink-0 text-h6">
               {{ row.title }}

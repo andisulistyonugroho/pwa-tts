@@ -23,7 +23,7 @@ const openQuestion = $debounce((level: number) => {
     <v-row>
       <v-col cols="12" class="text-center text-h5">{{ quizDetail.title }}</v-col>
       <v-col v-for="(level) in quizDetail.num_of_level" cols="4">
-        <v-card rounded="lg" class="text-center" @click="openQuestion(level)">
+        <v-card rounded="lg" class="text-center bg-yellow" @click="openQuestion(level)">
           <v-card-text>
             <v-avatar :color="`${levelisOpen?.includes(level) ? 'teal' : 'pink'}`"
               :icon="`${levelisOpen?.includes(level) ? 'mdi-lock-open-variant' : 'mdi-lock'}`"></v-avatar>

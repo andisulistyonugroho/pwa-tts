@@ -27,7 +27,7 @@ await getTopics()
   <v-container>
     <v-row>
       <v-col v-for="row in topics" cols="12">
-        <v-card rounded="lg" class="px-3 py-4 mb-2" @click="openTopic(row)">
+        <v-card rounded="lg" class="px-3 py-4 mb-2 bg-green-lighten-1" @click="openTopic(row)">
           <v-row class="flex-nowrap" no-gutters>
             <v-col cols="11" class="flex-grow-1 flex-shrink-0 text-h6">
               {{ row.title }}

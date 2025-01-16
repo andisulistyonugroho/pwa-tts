@@ -21,7 +21,7 @@ const countDon = (() => {
 countDon()
 </script>
 <template>
-  <v-card class="text-center" color="cyan-lighten-5">
+  <v-card class="text-center">
     <v-card-text>
       <div>
         <v-icon icon="mdi-medal" color="black" size="x-large" />
@@ -29,7 +29,7 @@ countDon()
         <v-icon icon="mdi-medal" color="red" size="x-large" />
       </div>
       <v-container class="px-0 fill-height">
-        <v-row wrap>
+        <v-row wrap justify="center">
           <v-col cols="12">
             <div class="greenboard pa-5">
               <div>
@@ -48,9 +48,11 @@ countDon()
             </div>
             <div>
               <v-radio-group>
-                <v-radio v-for="i in 4" class="bg-yellow-darken-1 rounded-xl py-1 mb-2">
+                <v-radio v-for="i in 4" class="bg-yellow rounded-xl py-1 mb-2">
                   <template v-slot:label>
-                    <span class="text-left text-h6">{{ String.fromCharCode(64 + i) }}: Satu dua tiga empat lima enam
+                    <span class="text-black text-left text-h6">{{ String.fromCharCode(64 + i) }}: Satu dua tiga
+                      empat
+                      lima enam
                       tujuh
                       delapan sembilan
                       sepuluh</span>
