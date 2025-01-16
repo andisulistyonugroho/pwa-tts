@@ -1,4 +1,7 @@
 <script setup lang="ts">
+
+const { questions } = storeToRefs(useQuestionStore())
+
 const baseTime = 25
 const countdown = ref(0)
 const theInterval = ref()
@@ -28,8 +31,8 @@ countDon()
         <span class="text-h5 text-teal mx-3">Poin: 50</span>
         <v-icon icon="mdi-medal" color="red" size="x-large" />
       </div>
-      <v-container class="px-0 fill-height">
-        <v-row wrap justify="center">
+      <v-container class="px-0 mt-12">
+        <v-row wrap>
           <v-col cols="12">
             <div class="greenboard pa-5">
               <div>

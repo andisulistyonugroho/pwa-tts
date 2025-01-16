@@ -5,6 +5,7 @@ definePageMeta({
 
 const { $bus, $debounce } = useNuxtApp()
 const { quizDetail, isDone } = storeToRefs(useQuizStore())
+const { getQuestionsByLevel } = useQuestionStore()
 
 const dialog = ref(false)
 
@@ -14,7 +15,9 @@ const levelisOpen = computed(() => {
   const theQuestions = isDone.value.find(obj => obj.quizId === quizDetail.value.id)
   return theQuestions?.questionLevel
 })
-const openQuestion = $debounce((level: number) => {
+
+const openQuestion = $debounce(async (level: number) => {
+  await getQuestionsByLevel({ quizId: quizDetail.value.id, level: level })
   dialog.value = true
 }, 1000, { leading: true, trailing: false })
 </script>
