@@ -11,7 +11,7 @@ definePageMeta({
           Teka Teki Siroh
         </div>
         <div class="text-h6 text-center">
-          Diulang biar ga lupa
+          Diulang-ulang biar gak lupa
         </div>
         <v-img src="/logo.svg" max-height="400" contain />
       </v-col>

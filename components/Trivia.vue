@@ -5,6 +5,15 @@ const { questions } = storeToRefs(useQuestionStore())
 const baseTime = 25
 const countdown = ref(0)
 const theInterval = ref()
+const questionNumber = ref(0)
+
+type Question = {
+  id: number,
+  quizid: number,
+  question_text: string,
+  the_level: number
+}
+const randomQuestion = ref<Question[]>([])
 
 countdown.value = baseTime
 
@@ -21,7 +30,21 @@ const countDon = (() => {
   }
 })
 
+const randomizeQuestion = (() => {
+  const y = [...questions.value]
+  for (let i = questions.value.length; i > 0; i--) {
+    const x = Math.floor(Math.random() * i)
+    randomQuestion.value.push(y[x])
+    y.splice(x, 1)
+  }
+})
+
+randomizeQuestion()
 countDon()
+
+const question = computed(() => {
+  return randomQuestion.value[questionNumber.value]
+})
 </script>
 <template>
   <v-card class="text-center">
@@ -38,12 +61,13 @@ countDon()
               <div>
                 <v-avatar size="62" :color="countdown < 11 ? 'pink' : 'black'" style="margin-top:-70px;"
                   class="text-h5">
-                  {{ countdown }}
+                  <span :class="`${countdown > 0 && countdown < 11 ? 'blink-me' : ''}`">
+                    {{ countdown }}
+                  </span>
                 </v-avatar>
               </div>
               <div class="text-h6">
-                asdfaldkfj alsdkfjaldfjk alsdkfjaldfjk alsdkfjaldfjk alsdkfjaldfjk alsdkfjaldfjk alsdkfjaldfjk
-                alsdkfjaldfjk alsdkfjaldfjk alsdkfjaldfjk alsdkfjaldfjk
+                {{ question.question_text }}
               </div>
             </div>
             <div class="pt-1 pb-6">
@@ -66,6 +90,7 @@ countDon()
           </v-col>
         </v-row>
       </v-container>
+      {{ questions }}
     </v-card-text>
     <v-card-actions>
       <v-btn size="large" variant="elevated" color="info" prepend-icon="mdi-exit-run" class="ma-3"
