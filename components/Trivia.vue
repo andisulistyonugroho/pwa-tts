@@ -1,5 +1,5 @@
 <script setup lang="ts">
-
+defineEmits(['closeit'])
 const { $debounce } = useNuxtApp()
 const { questions } = storeToRefs(useQuestionStore())
 
@@ -121,7 +121,6 @@ const nextQuestion = () => {
               Pertanyaan ke {{ questionNumber + 1 }} dari {{ numberOfQuestion }}
             </div>
             <div>
-              {{ chipGroup }} {{ typeof chipGroup }}
               <v-chip-group v-model="chipGroup" column>
                 <v-chip v-for="(row, i) in options" variant="outlined" color="teal" class="text-h6 bg-yellow ma-3"
                   size="large" @click="checkTheAnswer(row.id)">
