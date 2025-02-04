@@ -25,7 +25,7 @@ const openQuestion = $debounce(async (level: number) => {
   <v-container>
     <v-row>
       <v-col cols="12" class="text-center text-h5">{{ quizDetail.title }}</v-col>
-      <v-col v-for="(level) in quizDetail.num_of_level" cols="12" md="2">
+      <v-col v-for="(level) in quizDetail.num_of_level" cols="6" md="2">
         <v-card rounded="lg" class="text-center bg-yellow" @click="openQuestion(level)">
           <v-card-text>
             <v-avatar :color="`${levelisOpen?.includes(level) ? 'teal' : 'pink'}`"
