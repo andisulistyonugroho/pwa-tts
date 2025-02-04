@@ -1,7 +1,11 @@
 <script setup lang="ts">
-defineEmits(['closeit'])
 const { $debounce } = useNuxtApp()
 const { questions } = storeToRefs(useQuestionStore())
+
+defineEmits(['closeit'])
+const props = defineProps({
+  totallevel: { type: Number, default: 0 }
+})
 
 const baseTime = 25
 const countdown = ref(0)
@@ -12,6 +16,8 @@ const answerResult = ref(false)
 const noAnswerDialog = ref(false)
 const numberOfQuestion = ref(0)
 const chipGroup = ref(6)
+const allDone = ref(false)
+const correctAnswer = ref(0)
 
 type Question = {
   id: number,
@@ -26,6 +32,31 @@ type Question = {
 }
 const randomQuestion = ref<Question[]>([])
 countdown.value = baseTime
+
+watch(resultDialog, (newValue, oldValue) => {
+  if (oldValue === true && newValue === false) {
+    if (numberOfQuestion.value === questionNumber.value + 1) {
+      allDone.value = true
+      clearInterval(theInterval.value)
+      return
+    }
+    nextQuestion()
+  }
+})
+
+const question = computed(() => {
+  return randomQuestion.value[questionNumber.value]
+})
+const options = computed(() => {
+  const opt = []
+  const y = [...question.value.answer]
+  for (let i = y.length; i > 0; i--) {
+    const x = Math.floor(Math.random() * i)
+    opt.push(y[x])
+    y.splice(x, 1)
+  }
+  return opt
+})
 
 const countDon = (() => {
   clearInterval(theInterval.value)
@@ -50,29 +81,6 @@ const randomizeQuestion = (() => {
   }
 })
 
-randomizeQuestion()
-countDon()
-
-watch(resultDialog, (newValue, oldValue) => {
-  if (oldValue === true && newValue === false) {
-    nextQuestion()
-  }
-})
-
-const question = computed(() => {
-  return randomQuestion.value[questionNumber.value]
-})
-const options = computed(() => {
-  const opt = []
-  const y = [...question.value.answer]
-  for (let i = y.length; i > 0; i--) {
-    const x = Math.floor(Math.random() * i)
-    opt.push(y[x])
-    y.splice(x, 1)
-  }
-  return opt
-})
-
 const checkTheAnswer = $debounce((id: number) => {
   resultDialog.value = true
   noAnswerDialog.value = false
@@ -82,6 +90,7 @@ const checkTheAnswer = $debounce((id: number) => {
     return
   }
   answerResult.value = true
+  correctAnswer.value++
   clearInterval(theInterval.value)
 }, 500, { leading: false, trailing: true })
 
@@ -92,10 +101,13 @@ const nextQuestion = () => {
   countDon()
 }
 
+randomizeQuestion()
+countDon()
+
 </script>
 <template>
   <v-card class="text-center">
-    <v-card-text>
+    <v-card-text v-if="!allDone">
       <div>
         <v-icon icon="mdi-medal" color="black" size="x-large" />
         <span class="text-h5 text-teal mx-3">Poin: 50</span>
@@ -131,6 +143,23 @@ const nextQuestion = () => {
           </v-col>
         </v-row>
       </v-container>
+    </v-card-text>
+    <v-card-text v-else>
+      <div class="text-center body-1">
+        Part {{ randomQuestion[0].the_level }} <br>jawaban kamu benar
+        <div class="display-4 primary--text pt-2 pb-1">
+          <v-avatar color="primary" size="150">
+            <span class="white--text">{{ correctAnswer }}</span>
+          </v-avatar>
+        </div>
+        dari {{ numberOfQuestion }} pertanyaan
+      </div>
+      <div class="pt-4 text-center">
+        {{ correctAnswer !== numberOfQuestion ? 'belum ' : '' }}bisa melanjutkan ke {{ totallevel ===
+          randomQuestion[0].the_level ? 'chapter'
+          :
+          'part' }} berikutnya
+      </div>
     </v-card-text>
     <v-card-actions>
       <v-btn size="large" variant="elevated" color="info" prepend-icon="mdi-exit-run" class="ma-3"

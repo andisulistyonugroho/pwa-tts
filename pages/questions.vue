@@ -37,6 +37,6 @@ const openQuestion = $debounce(async (level: number) => {
     </v-row>
   </v-container>
   <v-dialog v-model="dialog" fullscreen>
-    <LazyTrivia v-if="dialog" @closeit="dialog = false" />
+    <LazyTrivia v-if="dialog" :totallevel="quizDetail.num_of_level" @closeit="dialog = false" />
   </v-dialog>
 </template>
