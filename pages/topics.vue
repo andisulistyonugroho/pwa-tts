@@ -33,7 +33,7 @@ await getTopics()
               {{ row.title }}
             </v-col>
             <v-col cols="1" class="flex-grow-0 flex-shrink-0 text-right">
-              <v-icon>mdi-chevron-right</v-icon>
+              <v-icon size="large" class="i-mdi:chevron-right">mdi-chevron-right</v-icon>
             </v-col>
           </v-row>
         </v-card>

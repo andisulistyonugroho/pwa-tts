@@ -116,9 +116,9 @@ countDon()
     <template v-if="!allDone">
       <v-card-text>
         <div>
-          <v-icon icon="mdi-medal" color="black" size="x-large" />
+          <v-icon icon="i-mdi-medal" color="black" size="x-large" />
           <span class="text-h5 text-teal mx-3">Poin: 50</span>
-          <v-icon icon="mdi-medal" color="red" size="x-large" />
+          <v-icon icon="i-mdi-medal" color="red" size="x-large" />
         </div>
         <v-container class="px-0 mt-12">
           <v-row wrap>
@@ -152,10 +152,10 @@ countDon()
         </v-container>
       </v-card-text>
       <v-card-actions>
-        <v-btn size="large" variant="elevated" color="info" prepend-icon="mdi-exit-run" class="ma-3"
+        <v-btn size="large" variant="elevated" color="info" prepend-icon="i-mdi-exit-run" class="ma-3"
           @click="$emit('closeit')">Keluar</v-btn>
         <v-spacer></v-spacer>
-        <v-btn v-if="!allDone" size="large" variant="elevated" color="info" append-icon="mdi-car-emergency"
+        <v-btn v-if="!allDone" size="large" variant="elevated" color="info" append-icon="i-mdi-car-emergency"
           class="ma-3">Bantuan</v-btn>
       </v-card-actions>
     </template>
@@ -176,11 +176,11 @@ countDon()
         </div>
       </v-card-text>
       <v-card-actions>
-        <v-btn size="large" variant="elevated" color="info" class="ma-3" prepend-icon="mdi-reload"
+        <v-btn size="large" variant="elevated" color="info" class="ma-3" prepend-icon="i-mdi-reload"
           @click="$emit('closeit')">Ulangi</v-btn>
         <v-spacer></v-spacer>
         <v-btn v-if="correctAnswer === numberOfQuestion" size="large" variant="elevated" color="info"
-          append-icon="mdi-arrow-right" class="ma-3">Lanjut</v-btn>
+          append-icon="i-mdi-arrow-right" class="ma-3">Lanjut</v-btn>
       </v-card-actions>
     </template>
   </v-card>
@@ -188,7 +188,7 @@ countDon()
     <v-card class="pa-5" @click="resultDialog = false">
       <v-card-text class="text-center">
         <v-icon :color="`${answerResult ? 'green' : 'red'}`" size="120">
-          {{ answerResult ? 'mdi-check-circle-outline' : 'mdi-close-circle-outline' }}
+          {{ answerResult ? 'i-mdi-check-circle-outline' : 'i-mdi-close-circle-outline' }}
         </v-icon>
         <div class="text-h4">
           {{ answerResult ? 'MasyaAllah' : 'Subhanallah' }}

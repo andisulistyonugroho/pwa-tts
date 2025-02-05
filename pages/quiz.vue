@@ -35,10 +35,10 @@ await getQuizzes()
               {{ row.title }}
             </v-col>
             <v-col cols="1" class="flex-grow-0 flex-shrink-0 text-right">
-              <v-icon color="teal" icon="mdi-lock-open-variant" />
+              <v-icon color="teal" icon="i-mdi-lock-open-variant" />
             </v-col>
             <v-col cols="1" class="flex-grow-0 flex-shrink-0 text-right">
-              <v-icon>mdi-chevron-right</v-icon>
+              <v-icon size="large" class="i-mdi:chevron-right">mdi-chevron-right</v-icon>
             </v-col>
           </v-row>
         </v-card>
@@ -48,10 +48,10 @@ await getQuizzes()
               {{ row.title }}
             </v-col>
             <v-col cols="1" class="flex-grow-0 flex-shrink-0 text-right">
-              <v-icon color="pink" icon="mdi-lock" />
+              <v-icon color="pink" icon="i-mdi-lock" />
             </v-col>
             <v-col cols="1" class="flex-grow-0 flex-shrink-0 text-right">
-              <v-icon>mdi-chevron-right</v-icon>
+              <v-icon size="large" class="i-mdi:chevron-right">mdi-chevron-right</v-icon>
             </v-col>
           </v-row>
         </v-card>

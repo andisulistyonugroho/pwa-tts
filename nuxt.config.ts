@@ -11,7 +11,7 @@ export default defineNuxtConfig({
     head: {
       charset: 'utf-16',
       viewport: 'width=device-width, initial-scale=1',
-      title: 'Soalium',
+      title: 'TekatekiSiroh',
       meta: [
         { name: 'description', content: 'TekatekiSiroh' },
         { name: 'apple-mobile-web-app-capable', content: 'yes' },
@@ -81,6 +81,7 @@ export default defineNuxtConfig({
     'dayjs-nuxt',
     '@pinia/nuxt',
     'pinia-plugin-persistedstate/nuxt',
+    '@unocss/nuxt'
   ],
   pwa: {
     strategies: 'generateSW',
@@ -99,7 +100,7 @@ export default defineNuxtConfig({
           purpose: ['any']
         }
       ],
-      id: 'tts/v0.1.0',
+      id: 'tts/v0.1.1',
       start_url: '/?source=pwa',
       display: 'fullscreen',
       scope: '/',
@@ -164,6 +165,12 @@ export default defineNuxtConfig({
     },
     vuetifyOptions: {
       /* vuetify options */
+      icons: {
+        defaultSet: 'unocss-mdi',
+      },
+      theme: {
+        defaultTheme: 'light',
+      },
     }
   }
 })

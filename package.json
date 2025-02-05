@@ -24,7 +24,10 @@
     "vuetify-nuxt-module": "^0.18.3"
   },
   "devDependencies": {
+    "@iconify-json/mdi": "^1.2.3",
+    "@unocss/nuxt": "^65.4.3",
     "sass": "^1.83.3",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "unocss": "^65.4.3"
   }
 }

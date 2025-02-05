@@ -36,7 +36,7 @@ const openQuestion = $debounce(async (level: number) => {
         <v-card rounded="lg" class="text-center bg-yellow" @click="openQuestion(level)">
           <v-card-text>
             <v-avatar :color="`${levelisOpen?.includes(level) ? 'teal' : 'pink'}`"
-              :icon="`${levelisOpen?.includes(level) ? 'mdi-lock-open-variant' : 'mdi-lock'}`"></v-avatar>
+              :icon="`${levelisOpen?.includes(level) ? 'i-mdi-lock-open-variant' : 'i-mdi-lock'}`"></v-avatar>
             <div class="mt-3">Part {{ level }}</div>
           </v-card-text>
         </v-card>

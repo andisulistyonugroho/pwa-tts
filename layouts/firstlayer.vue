@@ -17,7 +17,7 @@ onBeforeUnmount(() => {
   <v-app>
     <v-app-bar flat class="bg-purple-lighten-1">
       <template v-slot:prepend>
-        <v-btn icon @click="$router.go(-1)"><v-icon>mdi-arrow-left</v-icon></v-btn>
+        <v-btn icon @click="$router.go(-1)"><v-icon class="i-mdi:arrow-left" /></v-btn>
       </template>
 
       <v-app-bar-title>{{ title }}</v-app-bar-title>
