@@ -53,7 +53,6 @@ export const useQuizStore = defineStore('quiz', () => {
       }
 
       const found = isDone.value.findIndex(obj => obj.quizId === data[0].id)
-      console.log('found:', found)
       if (found < 0) {// not found
         isDone.value.push({ quizId: data[0].id, questionLevel: [1] })
       }
@@ -106,7 +105,24 @@ export const useQuizStore = defineStore('quiz', () => {
       return Promise.reject(error)
     }
   })
-  return { getQuizzes, getQuizById, deleteAccount, getTopics, quizzes, quizDetail, questionMode, topics, topicDetail, isDone }
+
+  const openNextLevel = (quizId: number, theLevel: number) => {
+    const quizFound = isDone.value.find(obj => obj.quizId === quizId)
+    if (!quizFound) {
+      return
+    }
+
+    console.log('level found:')
+    const levelFound = quizFound.questionLevel.indexOf(theLevel)
+    console.log(levelFound)
+    if (levelFound >= 0) {
+      return
+    }
+
+    quizFound.questionLevel.push(theLevel)
+  }
+
+  return { getQuizzes, getQuizById, deleteAccount, getTopics, openNextLevel, quizzes, quizDetail, questionMode, topics, topicDetail, isDone }
 }, {
   persist: {
     storage: piniaPluginPersistedstate.localStorage(),

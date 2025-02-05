@@ -1,10 +1,12 @@
 <script setup lang="ts">
 const { $debounce } = useNuxtApp()
+const { openNextLevel } = useQuizStore()
 const { questions } = storeToRefs(useQuestionStore())
 
 defineEmits(['closeit'])
 const props = defineProps({
-  totallevel: { type: Number, default: 0 }
+  totallevel: { type: Number, default: 0 },
+  quizid: { type: Number, default: 0 }
 })
 
 const baseTime = 25
@@ -38,6 +40,10 @@ watch(resultDialog, (newValue, oldValue) => {
     if (numberOfQuestion.value === questionNumber.value + 1) {
       allDone.value = true
       clearInterval(theInterval.value)
+      if (correctAnswer.value === numberOfQuestion.value) {
+        console.log('quizid:', randomQuestion.value[0].quizid)
+        openNextLevel(props.quizid, question.value.the_level + 1)
+      }
       return
     }
     nextQuestion()
@@ -107,66 +113,76 @@ countDon()
 </script>
 <template>
   <v-card class="text-center">
-    <v-card-text v-if="!allDone">
-      <div>
-        <v-icon icon="mdi-medal" color="black" size="x-large" />
-        <span class="text-h5 text-teal mx-3">Poin: 50</span>
-        <v-icon icon="mdi-medal" color="red" size="x-large" />
-      </div>
-      <v-container class="px-0 mt-12">
-        <v-row wrap>
-          <v-col cols="12">
-            <div class="greenboard pa-5">
-              <div>
-                <v-avatar size="62" :color="countdown < 11 ? 'pink' : 'black'" style="margin-top:-70px;"
-                  class="text-h5">
-                  <span :class="`${countdown > 0 && countdown < 11 ? 'blink-me' : ''}`">
-                    {{ countdown }}
-                  </span>
-                </v-avatar>
-              </div>
-              <div class="text-h6">
-                {{ question.question_text }}
-              </div>
-            </div>
-            <div class="pt-1 pb-6">
-              Pertanyaan ke {{ questionNumber + 1 }} dari {{ numberOfQuestion }}
-            </div>
-            <div>
-              <v-chip-group v-model="chipGroup" column>
-                <v-chip v-for="(row, i) in options" variant="outlined" color="teal" class="text-h6 bg-yellow ma-3"
-                  size="large" @click="checkTheAnswer(row.id)">
-                  {{ String.fromCharCode(65 + i) }}: {{ row.the_text }}
-                </v-chip>
-              </v-chip-group>
-            </div>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-card-text>
-    <v-card-text v-else>
-      <div class="text-center body-1">
-        Part {{ randomQuestion[0].the_level }} <br>jawaban kamu benar
-        <div class="display-4 primary--text pt-2 pb-1">
-          <v-avatar color="primary" size="150">
-            <span class="white--text">{{ correctAnswer }}</span>
-          </v-avatar>
+    <template v-if="!allDone">
+      <v-card-text>
+        <div>
+          <v-icon icon="mdi-medal" color="black" size="x-large" />
+          <span class="text-h5 text-teal mx-3">Poin: 50</span>
+          <v-icon icon="mdi-medal" color="red" size="x-large" />
         </div>
-        dari {{ numberOfQuestion }} pertanyaan
-      </div>
-      <div class="pt-4 text-center">
-        {{ correctAnswer !== numberOfQuestion ? 'belum ' : '' }}bisa melanjutkan ke {{ totallevel ===
-          randomQuestion[0].the_level ? 'chapter'
-          :
-          'part' }} berikutnya
-      </div>
-    </v-card-text>
-    <v-card-actions>
-      <v-btn size="large" variant="elevated" color="info" prepend-icon="mdi-exit-run" class="ma-3"
-        @click="$emit('closeit')">Keluar</v-btn>
-      <v-spacer></v-spacer>
-      <v-btn size="large" variant="elevated" color="info" append-icon="mdi-car-emergency" class="ma-3">Bantuan</v-btn>
-    </v-card-actions>
+        <v-container class="px-0 mt-12">
+          <v-row wrap>
+            <v-col cols="12">
+              <div class="greenboard pa-5">
+                <div>
+                  <v-avatar size="62" :color="countdown < 11 ? 'pink' : 'black'" style="margin-top:-70px;"
+                    class="text-h5">
+                    <span :class="`${countdown > 0 && countdown < 11 ? 'blink-me' : ''}`">
+                      {{ countdown }}
+                    </span>
+                  </v-avatar>
+                </div>
+                <div class="text-h6">
+                  {{ question.question_text }}
+                </div>
+              </div>
+              <div class="pt-1 pb-6">
+                Pertanyaan ke {{ questionNumber + 1 }} dari {{ numberOfQuestion }}
+              </div>
+              <div>
+                <v-chip-group v-model="chipGroup" column>
+                  <v-chip v-for="(row, i) in options" variant="outlined" color="teal" class="text-h6 bg-yellow ma-3"
+                    size="large" @click="checkTheAnswer(row.id)">
+                    {{ String.fromCharCode(65 + i) }}: {{ row.the_text }}
+                  </v-chip>
+                </v-chip-group>
+              </div>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn size="large" variant="elevated" color="info" prepend-icon="mdi-exit-run" class="ma-3"
+          @click="$emit('closeit')">Keluar</v-btn>
+        <v-spacer></v-spacer>
+        <v-btn v-if="!allDone" size="large" variant="elevated" color="info" append-icon="mdi-car-emergency"
+          class="ma-3">Bantuan</v-btn>
+      </v-card-actions>
+    </template>
+    <template v-else>
+      <v-card-text>
+        <div class="text-center text-h4 my-6 pt-6">
+          Part {{ randomQuestion[0].the_level }} <br>Jumlah jawaban benar
+          <div class="text-h1 primary--text py-6 my-6">
+            <v-avatar color="primary" size="150">
+              <span class="white--text">{{ correctAnswer }}</span>
+            </v-avatar>
+          </div>
+          dari {{ numberOfQuestion }} pertanyaan
+        </div>
+        <div class="text-h5 pt-4 text-center">
+          {{ correctAnswer !== numberOfQuestion ? 'belum ' : '' }}bisa melanjutkan<br>ke {{ totallevel ===
+            randomQuestion[0].the_level ? 'chapter' : 'part' }} berikutnya
+        </div>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn size="large" variant="elevated" color="info" class="ma-3" prepend-icon="mdi-reload"
+          @click="$emit('closeit')">Ulangi</v-btn>
+        <v-spacer></v-spacer>
+        <v-btn v-if="correctAnswer === numberOfQuestion" size="large" variant="elevated" color="info"
+          append-icon="mdi-arrow-right" class="ma-3">Lanjut</v-btn>
+      </v-card-actions>
+    </template>
   </v-card>
   <v-dialog v-model="resultDialog" max-width="500">
     <v-card class="pa-5" @click="resultDialog = false">

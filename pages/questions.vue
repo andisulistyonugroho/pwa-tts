@@ -8,6 +8,7 @@ const { quizDetail, isDone } = storeToRefs(useQuizStore())
 const { getQuestionsByLevel } = useQuestionStore()
 
 const dialog = ref(false)
+const currentLevel = ref(1)
 
 $bus.$emit('set-header', 'Level')
 
@@ -17,8 +18,14 @@ const levelisOpen = computed(() => {
 })
 
 const openQuestion = $debounce(async (level: number) => {
-  await getQuestionsByLevel({ quizId: quizDetail.value.id, level: level })
-  dialog.value = true
+  const foundquiz = isDone.value.find(obj => obj.quizId === quizDetail.value.id)
+  if (foundquiz && foundquiz.questionLevel.includes(level)) {
+    await getQuestionsByLevel({ quizId: quizDetail.value.id, level: level })
+    currentLevel.value = level
+    dialog.value = true
+  } else {
+    alert('Belum bisa diakses')
+  }
 }, 1000, { leading: true, trailing: false })
 </script>
 <template>
@@ -37,6 +44,6 @@ const openQuestion = $debounce(async (level: number) => {
     </v-row>
   </v-container>
   <v-dialog v-model="dialog" fullscreen>
-    <LazyTrivia v-if="dialog" :totallevel="quizDetail.num_of_level" @closeit="dialog = false" />
+    <LazyTrivia v-if="dialog" :totallevel="quizDetail.num_of_level" :quizid="quizDetail.id" @closeit="dialog = false" />
   </v-dialog>
 </template>
