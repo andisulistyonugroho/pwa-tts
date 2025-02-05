@@ -2,10 +2,9 @@
 definePageMeta({
   layout: 'empty'
 })
-const bgfront = ref('bg-cyan')
 </script>
 <template>
-  <v-container fluid :class="`${bgfront} fill-height`">
+  <v-container fluid class="bg-cyan fill-height">
     <v-row>
       <v-col cols="12" md="8">
         <div class="text-h2 text-center font-weight-bold">
@@ -18,7 +17,7 @@ const bgfront = ref('bg-cyan')
       </v-col>
       <v-col cols="12" md="4">
         <v-btn block size="x-large" variant="flat" color="purple darken-1 white--text" to="/topics"
-          class="font-weight-bold" @click="bgfront = `bg-white`">
+          class="font-weight-bold">
           Topik
         </v-btn>
       </v-col>

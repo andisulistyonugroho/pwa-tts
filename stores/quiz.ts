@@ -42,7 +42,8 @@ export const useQuizStore = defineStore('quiz', () => {
       const { data } = await $api.get('/Quizzes', {
         params: {
           filter: {
-            where: { topicsId: topicDetail.value.id, is_active: true }
+            where: { topicsId: topicDetail.value.id, is_active: true },
+            order: 'position ASC'
           }
         }
       })
@@ -112,9 +113,7 @@ export const useQuizStore = defineStore('quiz', () => {
       return
     }
 
-    console.log('level found:')
     const levelFound = quizFound.questionLevel.indexOf(theLevel)
-    console.log(levelFound)
     if (levelFound >= 0) {
       return
     }
@@ -122,7 +121,16 @@ export const useQuizStore = defineStore('quiz', () => {
     quizFound.questionLevel.push(theLevel)
   }
 
-  return { getQuizzes, getQuizById, deleteAccount, getTopics, openNextLevel, quizzes, quizDetail, questionMode, topics, topicDetail, isDone }
+  const openNextQuiz = (quizId: number) => {
+    const index = quizzes.value.findIndex(obj => obj.id === quizId)
+    const nextQuiz = quizzes.value[index + 1]
+    isDone.value.push({ quizId: nextQuiz.id, questionLevel: [1] })
+  }
+
+  return {
+    getQuizzes, getQuizById, deleteAccount, getTopics, openNextLevel, openNextQuiz,
+    quizzes, quizDetail, questionMode, topics, topicDetail, isDone
+  }
 }, {
   persist: {
     storage: piniaPluginPersistedstate.localStorage(),

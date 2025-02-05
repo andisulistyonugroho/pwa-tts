@@ -24,7 +24,7 @@ const openQuestion = $debounce(async (level: number) => {
     currentLevel.value = level
     dialog.value = true
   } else {
-    alert('Belum bisa diakses')
+    console.log('belum bisa di akses')
   }
 }, 1000, { leading: true, trailing: false })
 </script>

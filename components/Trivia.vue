@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const { $debounce } = useNuxtApp()
-const { openNextLevel } = useQuizStore()
+const { openNextLevel, openNextQuiz } = useQuizStore()
 const { questions } = storeToRefs(useQuestionStore())
 
 defineEmits(['closeit'])
@@ -42,7 +42,11 @@ watch(resultDialog, (newValue, oldValue) => {
       clearInterval(theInterval.value)
       if (correctAnswer.value === numberOfQuestion.value) {
         console.log('quizid:', randomQuestion.value[0].quizid)
-        openNextLevel(props.quizid, question.value.the_level + 1)
+        if (question.value.the_level + 1 > props.totallevel) {
+          openNextQuiz(props.quizid)
+        } else {
+          openNextLevel(props.quizid, question.value.the_level + 1)
+        }
       }
       return
     }
