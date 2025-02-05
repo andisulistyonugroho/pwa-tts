@@ -13,7 +13,7 @@ export default defineNuxtConfig({
       viewport: 'width=device-width, initial-scale=1',
       title: 'Soalium',
       meta: [
-        { name: 'description', content: 'Soalium' },
+        { name: 'description', content: 'TekatekiSiroh' },
         { name: 'apple-mobile-web-app-capable', content: 'yes' },
         { name: 'mobile-web-app-capable', content: 'yes' }
       ],
@@ -86,9 +86,9 @@ export default defineNuxtConfig({
     strategies: 'generateSW',
     registerType: 'autoUpdate',
     manifest: {
-      short_name: 'Soalium',
-      name: 'Soalium: biar ga lupa sejarah',
-      description: 'Soalium',
+      short_name: 'Tekateki Siroh',
+      name: 'Tekateki Siroh',
+      description: 'Tekateki Siroh',
       background_color: '#00bcd4',
       theme_color: '#00bcd4',
       icons: [
@@ -99,7 +99,7 @@ export default defineNuxtConfig({
           purpose: ['any']
         }
       ],
-      id: '/?source=pwa',
+      id: 'tts/v0.1.0',
       start_url: '/?source=pwa',
       display: 'fullscreen',
       scope: '/',
@@ -118,7 +118,7 @@ export default defineNuxtConfig({
       ]
     },
     workbox: {
-      cacheId: 'soalium',
+      cacheId: 'tekateksiroh',
       runtimeCaching: [
         {
           urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
