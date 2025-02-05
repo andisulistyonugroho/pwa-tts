@@ -139,14 +139,17 @@ countDon()
               <div class="pt-1 pb-6">
                 Pertanyaan ke {{ questionNumber + 1 }} dari {{ numberOfQuestion }}
               </div>
-              <div>
-                <v-chip-group v-model="chipGroup" column>
-                  <v-chip v-for="(row, i) in options" variant="outlined" color="teal" class="text-h6 bg-yellow ma-3"
-                    size="large" @click="checkTheAnswer(row.id)">
-                    {{ String.fromCharCode(65 + i) }}: {{ row.the_text }}
-                  </v-chip>
-                </v-chip-group>
-              </div>
+              <v-container class="pa-0 ma-0">
+                <v-row>
+                  <v-col v-for="(row, i) in options" cols="12">
+                    <v-card variant="outlined" class="bg-yellow" @click="checkTheAnswer(row.id)" rounded="xl">
+                      <v-card-text class="text-h6">
+                        {{ String.fromCharCode(65 + i) }}: {{ row.the_text }}
+                      </v-card-text>
+                    </v-card>
+                  </v-col>
+                </v-row>
+              </v-container>
             </v-col>
           </v-row>
         </v-container>
@@ -180,7 +183,7 @@ countDon()
           @click="$emit('closeit')">Ulangi</v-btn>
         <v-spacer></v-spacer>
         <v-btn v-if="correctAnswer === numberOfQuestion" size="large" variant="elevated" color="info"
-          append-icon="i-mdi-arrow-right" class="ma-3">Lanjut</v-btn>
+          append-icon="i-mdi-arrow-right" class="ma-3" @click="$emit('closeit')">Lanjut</v-btn>
       </v-card-actions>
     </template>
   </v-card>

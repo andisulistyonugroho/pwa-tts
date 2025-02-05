@@ -15,7 +15,7 @@ onBeforeUnmount(() => {
 <template>
   <NuxtPwaManifest />
   <v-app>
-    <v-app-bar flat class="bg-purple-lighten-1">
+    <v-app-bar flat class="bg-">
       <template v-slot:prepend>
         <v-btn icon @click="$router.go(-1)"><v-icon class="i-mdi:arrow-left" /></v-btn>
       </template>
