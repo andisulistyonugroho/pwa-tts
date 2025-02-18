@@ -18,7 +18,7 @@ definePageMeta({
       <v-col cols="12" md="4">
         <v-btn block size="x-large" variant="flat" color="purple darken-1 white--text" to="/topics"
           class="font-weight-bold">
-          Topik
+          mulai
         </v-btn>
       </v-col>
     </v-row>
