@@ -131,9 +131,4 @@ export const useQuizStore = defineStore('quiz', () => {
     getQuizzes, getQuizById, deleteAccount, getTopics, openNextLevel, openNextQuiz,
     quizzes, quizDetail, questionMode, topics, topicDetail, isDone
   }
-}, {
-  persist: {
-    storage: piniaPluginPersistedstate.localStorage(),
-    key: 'pwtts'
-  }
 })

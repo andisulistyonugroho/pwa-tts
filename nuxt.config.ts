@@ -100,7 +100,7 @@ export default defineNuxtConfig({
           purpose: ['any']
         }
       ],
-      id: 'tts/v0.1.3',
+      id: 'tts/v0.1.4',
       start_url: '/?source=pwa',
       display: 'fullscreen',
       scope: '/',
