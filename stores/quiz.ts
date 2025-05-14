@@ -39,14 +39,7 @@ export const useQuizStore = defineStore('quiz', () => {
 
   const getQuizzes = (async () => {
     try {
-      const { data } = await $api.get('/Quizzes', {
-        params: {
-          filter: {
-            where: { topicsId: topicDetail.value.id, is_active: true },
-            order: 'position ASC'
-          }
-        }
-      })
+      const { data } = await $api.get(`/topics/${topicDetail.value.id}/quiz`)
       quizzes.value = data
 
       if (topicDetail.value.id < 1 || data.length < 1) {
