@@ -92,14 +92,7 @@ export const useQuizStore = defineStore('quiz', () => {
 
   const getTopics = (async () => {
     try {
-      const { data } = await $api.get('/Topics', {
-        params: {
-          filter: {
-            where: { is_active: 1 },
-            fields: ['id', 'title']
-          }
-        }
-      })
+      const { data } = await $api.get('/topics')
       topics.value = data
       return Promise.resolve(data)
     } catch (error) {

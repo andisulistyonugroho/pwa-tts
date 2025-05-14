@@ -6,7 +6,7 @@ export default defineNuxtConfig({
     // host: '0.0.0.0',
     port: 8080
   },
-  ssr: false,
+  ssr: true,
   app: {
     head: {
       charset: 'utf-16',
@@ -72,7 +72,7 @@ export default defineNuxtConfig({
   css: ['@/assets/main.scss'],
   runtimeConfig: {
     public: {
-      apiBase: process.env.BASE_URL || 'http://localhost:3000/api/',
+      apiBase: process.env.BASE_URL || 'http://localhost:3000/',
     },
   },
   modules: [

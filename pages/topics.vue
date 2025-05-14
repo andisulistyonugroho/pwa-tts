@@ -21,7 +21,7 @@ const openTopic = $debounce(async (input: {
 }, 1000, { leading: true, trailing: false })
 
 $bus.$emit('set-header', 'Topik')
-await getTopics()
+getTopics()
 </script>
 <template>
   <v-container>
