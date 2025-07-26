@@ -1,4 +1,6 @@
 <template>
   <NuxtPwaManifest />
-  <slot />
+  <v-app>
+    <slot />
+  </v-app>
 </template>

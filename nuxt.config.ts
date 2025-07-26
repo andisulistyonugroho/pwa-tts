@@ -1,12 +1,20 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+const theVersion = '0.01'
 export default defineNuxtConfig({
-  compatibilityDate: '2024-11-01',
+  compatibilityDate: '2025-05-15',
   devtools: { enabled: true },
   devServer: {
     // host: '0.0.0.0',
     port: 8080
   },
-  ssr: true,
+
+  ssr: false,
+  runtimeConfig: {
+    public: {
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || 'http://localhost:3000',
+      theVersion: theVersion
+    }
+  },
   app: {
     head: {
       charset: 'utf-16',
@@ -18,11 +26,6 @@ export default defineNuxtConfig({
         { name: 'mobile-web-app-capable', content: 'yes' }
       ],
       link: [
-        { rel: 'dns-prefetch', href: 'https://fonts.googleapis.com' },
-        { rel: 'dns-prefetch', href: 'https://fonts.gstatic.com' },
-        { rel: 'preconnect', crossorigin: 'anonymous', href: 'https://fonts.googleapis.com' },
-        { rel: 'preconnect', crossorigin: 'anonymous', href: 'https://fonts.gstatic.com' },
-        { rel: 'stylesheet', crossorigin: 'anonymous', href: 'https://fonts.googleapis.com/css2?family=Londrina+Solid:wght@300&display=swap' },
         { rel: 'icon', href: '/splash_screens/icon.png' },
         { rel: 'apple-touch-startup-image', media: 'screen and (device-width: 440px) and (device-height: 956px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)', href: '/splash_screens/iPhone_16_Pro_Max_landscape.png' },
         { rel: 'apple-touch-startup-image', media: 'screen and (device-width: 402px) and (device-height: 874px) and (-webkit-device-pixel-ratio: 3) and (orientation: landscape)', href: '/splash_screens/iPhone_16_Pro_landscape.png' },
@@ -70,18 +73,17 @@ export default defineNuxtConfig({
     }
   },
   css: ['@/assets/main.scss'],
-  runtimeConfig: {
-    public: {
-      apiBase: process.env.BASE_URL || 'http://localhost:3000/',
-    },
-  },
   modules: [
+    '@nuxt/eslint',
+    '@nuxt/test-utils',
+    '@nuxt/image',
     'vuetify-nuxt-module',
-    '@vite-pwa/nuxt',
     'dayjs-nuxt',
     '@pinia/nuxt',
-    'pinia-plugin-persistedstate/nuxt',
-    '@unocss/nuxt'
+    '@pinia-plugin-persistedstate/nuxt',
+    '@unocss/nuxt',
+    '@vite-pwa/nuxt',
+    '@nuxtjs/device'
   ],
   pwa: {
     strategies: 'generateSW',
@@ -100,9 +102,9 @@ export default defineNuxtConfig({
           purpose: ['any']
         }
       ],
-      id: 'tts/v0.1.4',
+      id: `tts/v${theVersion}`,
       start_url: '/?source=pwa',
-      display: 'fullscreen',
+      display: 'standalone',
       scope: '/',
       screenshots: [
         {
@@ -150,8 +152,11 @@ export default defineNuxtConfig({
           }
         }
       ],
-      navigateFallback: '/',
+      navigateFallback: 'null',
       globPatterns: ['**/*.{js,css,html,png,svg,ico}']
+    },
+    client: {
+      installPrompt: true
     },
     devOptions: {
       suppressWarnings: true,
@@ -160,11 +165,8 @@ export default defineNuxtConfig({
     }
   },
   vuetify: {
-    moduleOptions: {
-      /* module specific options */
-    },
+    moduleOptions: {},
     vuetifyOptions: {
-      /* vuetify options */
       icons: {
         defaultSet: 'unocss-mdi',
       },
@@ -172,5 +174,8 @@ export default defineNuxtConfig({
         defaultTheme: 'light',
       },
     }
+  },
+  dayjs: {
+    plugins: ['duration']
   }
 })

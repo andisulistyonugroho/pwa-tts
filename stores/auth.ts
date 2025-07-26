@@ -30,7 +30,7 @@ export const useAuthStore = defineStore('auth', () => {
   return { setUser, setProfile, setRole, logout, user }
 }, {
   persist: {
-    storage: piniaPluginPersistedstate.localStorage(),
+    storage: persistedState.localStorage,
     key: 'pwtts'
   }
 }

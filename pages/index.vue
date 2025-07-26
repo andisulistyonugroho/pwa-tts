@@ -2,6 +2,13 @@
 definePageMeta({
   layout: 'empty'
 })
+
+const { totalPoint } = storeToRefs(usePointStore())
+
+const doStart = () => {
+  totalPoint.value = 0
+  navigateTo('/topics', { replace: true })
+}
 </script>
 <template>
   <v-container fluid class="bg-cyan fill-height">
@@ -16,8 +23,7 @@ definePageMeta({
         <v-img src="/logo.svg" max-height="400" contain />
       </v-col>
       <v-col cols="12" md="4">
-        <v-btn block size="x-large" variant="flat" color="purple darken-1 white--text" to="/topics"
-          class="font-weight-bold">
+        <v-btn block size="x-large" variant="flat" class="font-weight-bold bg-purple" @click="doStart()">
           mulai
         </v-btn>
       </v-col>

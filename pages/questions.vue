@@ -1,49 +1,170 @@
 <script setup lang="ts">
 definePageMeta({
-  layout: 'firstlayer'
+  layout: 'empty'
 })
 
-const { $bus, $debounce } = useNuxtApp()
-const { quizDetail, isDone } = storeToRefs(useQuizStore())
+const { $debounce, $dayjs } = useNuxtApp()
+
 const { getQuestionsByLevel } = useQuestionStore()
+const { questions } = storeToRefs(useQuestionStore())
+const { AddPoint, DeductPoint, QuizTotalTimeUpdate, ResetQuizesPoint } = usePointStore()
+const { totalPoint, userPoint } = storeToRefs(usePointStore())
+const { selectedQuiz, quizStartTime, quizEndTime } = storeToRefs(useQuizStore())
 
-const dialog = ref(false)
-const currentLevel = ref(1)
 
-$bus.$emit('set-header', 'Level')
+const numberOfQuestion = ref(0)
+const randomQuestion = ref(questions)
+const questionIndex = ref(0)
+const answerBox = ref(false)
+const answerState = ref(false)
+const selectedOpt = ref(0)
 
-const levelisOpen = computed(() => {
-  const theQuestions = isDone.value.find(obj => obj.quizId === quizDetail.value.id)
-  return theQuestions?.questionLevel
+const randomizeQuestion = (() => {
+  if (questions.value.length <= 0) {
+    navigateTo('/topics', { replace: true })
+    return
+  }
+
+  const y = [...questions.value]
+  numberOfQuestion.value = y.length
+  randomQuestion.value = []
+  for (let i = y.length; i > 0; i--) {
+    const x = Math.floor(Math.random() * i)
+    if (y[x] && randomQuestion.value) {
+      const rand = y[x]
+      randomQuestion.value.push(rand)
+    }
+    y.splice(x, 1)
+  }
 })
 
-const openQuestion = $debounce(async (level: number) => {
-  const foundquiz = isDone.value.find(obj => obj.quizId === quizDetail.value.id)
-  if (foundquiz && foundquiz.questionLevel.includes(level)) {
-    await getQuestionsByLevel({ quizId: quizDetail.value.id, level: level })
-    currentLevel.value = level
-    dialog.value = true
+const checkTheAnswer = $debounce((id: number) => {
+  selectedOpt.value = id
+  const index = theOptions.value.findIndex(obj => obj.id === id && obj.is_correct === true)
+  if (index >= 0) {
+    AddPoint(questions.value[0].quiz_id)
   } else {
-    console.log('belum bisa di akses')
+    DeductPoint(questions.value[0].quiz_id)
+  }
+  answerState.value = index >= 0
+  answerBox.value = true
+
+  checkQuizEndTime()
+
+}, 300, { leading: false, trailing: true })
+
+const nextQuestion = $debounce(async () => {
+  if (!selectedQuiz.value) return
+
+  answerBox.value = false
+  answerState.value = false
+  selectedOpt.value = 0
+
+  if (questionIndex.value < numberOfQuestion.value - 1) {
+    questionIndex.value += 1
+  } else {
+    const nextLevel = questions.value[0].the_level + 1
+    if (nextLevel > selectedQuiz.value.num_of_level) {
+      navigateTo('/chapterCompleted', { replace: true })
+      return
+    }
+
+    await getQuestionsByLevel(selectedQuiz.value.id, nextLevel)
+    randomizeQuestion()
+    questionIndex.value = 0
   }
 }, 1000, { leading: true, trailing: false })
+
+const exitQuiz = $debounce(() => {
+  ResetQuizesPoint()
+  navigateTo('/quiz', { replace: true })
+}, 1000, { leading: true, trailing: false })
+
+const checkQuizEndTime = () => {
+  if (!selectedQuiz.value) return
+
+  const nextLevel = questions.value[0].the_level + 1
+  if (questionIndex.value === numberOfQuestion.value - 1 && nextLevel > selectedQuiz.value.num_of_level) {
+    quizEndTime.value = $dayjs()
+
+    QuizTotalTimeUpdate(quizStartTime.value, quizEndTime.value)
+  }
+}
+
+const question = computed(() => {
+  return randomQuestion.value[questionIndex.value]
+})
+
+const theOptions = computed(() => {
+  const opt = []
+  const y = [...question.value.options]
+  for (let i = y.length; i > 0; i--) {
+    const x = Math.floor(Math.random() * i)
+    opt.push(y[x])
+    y.splice(x, 1)
+  }
+
+  return opt
+})
+
+randomizeQuestion()
+quizStartTime.value = $dayjs()
 </script>
 <template>
-  <v-container>
+  <v-container v-if="questions.length" fluid class="px-2 h-100 bg-yellow-lighten-5">
     <v-row>
-      <v-col cols="12" class="text-center text-h5">{{ quizDetail.title }}</v-col>
-      <v-col v-for="(level) in quizDetail.num_of_level" cols="6" md="2">
-        <v-card rounded="lg" class="text-center bg-yellow" @click="openQuestion(level)">
-          <v-card-text>
-            <v-avatar :color="`${levelisOpen?.includes(level) ? 'teal' : 'pink'}`"
-              :icon="`${levelisOpen?.includes(level) ? 'i-mdi-lock-open-variant' : 'i-mdi-lock'}`"></v-avatar>
-            <div class="mt-3">Part {{ level }}</div>
-          </v-card-text>
-        </v-card>
+      <v-col cols="12" class="text-h5 text-center"></v-col>
+    </v-row>
+    <v-row align-self="start">
+      <v-col cols="12" class="text-center text-h5">
+        Total Poin: {{ totalPoint }}
+      </v-col>
+      <v-col cols="12">
+        <div class="pt-1 pb-4 text-center">
+          Pertanyaan ke {{ questionIndex + 1 }} dari {{ numberOfQuestion }} (Level {{ question.the_level }})
+        </div>
+        <div class="greenboard pa-5">
+          <!-- <div>
+            <v-avatar size="62" :color="countdown < 11 ? 'pink' : 'black'" style="margin-top:-70px;" class="text-h5">
+              <span :class="`${countdown > 0 && countdown < 11 ? 'blink-me' : ''}`">
+                {{ countdown }}
+              </span>
+            </v-avatar>
+          </div> -->
+          <div class="text-h6 text-center">
+            {{ question.question_text }}
+          </div>
+        </div>
+      </v-col>
+      <v-col v-for="(row, i) in theOptions" cols="12">
+        <div
+          :class="`${selectedOpt === row.id ? 'bg-orange' : 'bg-yellow'} pa-2 text-center text-h6 border-thin rounded-xl`"
+          @click="checkTheAnswer(row.id)">
+          {{ String.fromCharCode(65 + i) }}: {{ row.the_text }}
+        </div>
       </v-col>
     </v-row>
   </v-container>
-  <v-dialog v-model="dialog" fullscreen>
-    <LazyTrivia v-if="dialog" :totallevel="quizDetail.num_of_level" :quizid="quizDetail.id" @closeit="dialog = false" />
+  <v-footer v-if="questions.length" color="yellow-lighten-5">
+    <v-btn size="large" variant="elevated" color="pink" prepend-icon="i-mdi-exit-run" class="ma-3"
+      @click="exitQuiz()">Keluar</v-btn>
+    <v-spacer></v-spacer>
+    <v-btn disabled size="large" variant="elevated" append-icon="i-mdi-car-emergency" class="ma-3">Bantuan</v-btn>
+  </v-footer>
+
+
+  <v-dialog v-model="answerBox" persistent max-width="300">
+    <v-card :color="answerState ? 'green' : 'red'">
+      <v-card-text class="text-center">
+        <v-icon :icon="answerState ? 'i-mdi-check-decagram' : 'i-mdi-alert-decagram'" size="50"></v-icon>
+        <h1>Jawaban {{ answerState ? 'Benar' : 'Salah' }}</h1>
+        <div>{{ answerState ? 'Bertambah' : 'Berkurang' }} satu poin</div>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn color=" white" rounded="xl" variant="flat"
+          :class="`${answerState ? 'text-green' : 'text-red'} text-capitalize`" @click="nextQuestion()"
+          append-icon="i-mdi-arrow-right">Lanjutkan</v-btn>
+      </v-card-actions>
+    </v-card>
   </v-dialog>
 </template>

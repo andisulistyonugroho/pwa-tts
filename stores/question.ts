@@ -6,23 +6,12 @@
 export const useQuestionStore = defineStore('question', () => {
   const { $api } = useNuxtApp()
 
-  const questions = ref([])
+  const questions = ref<Question[]>([])
   const numOfQuestion = ref(0)
 
-  const getQuestionsByLevel = (async (payload: { quizId: number, level: number }) => {
+  const getQuestionsByLevel = (async (quizId: number, level: number) => {
     try {
-      const { data } = await $api.get('/Questions', {
-        params: {
-          filter: {
-            where: {
-              quizId: payload.quizId,
-              the_level: payload.level,
-              is_active: true
-            },
-            include: 'answer'
-          }
-        }
-      })
+      const { data } = await $api.get(`/quiz/${quizId}/${level}/question`)
       questions.value = data
       numOfQuestion.value = data.length
 

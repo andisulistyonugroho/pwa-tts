@@ -15,14 +15,14 @@ onBeforeUnmount(() => {
 <template>
   <NuxtPwaManifest />
   <v-app>
-    <v-app-bar flat class="bg-">
+    <v-app-bar flat class="bg-yellow-lighten-5">
       <template v-slot:prepend>
         <v-btn icon @click="$router.go(-1)"><v-icon class="i-mdi:arrow-left" /></v-btn>
       </template>
 
       <v-app-bar-title>{{ title }}</v-app-bar-title>
     </v-app-bar>
-    <v-main class="">
+    <v-main>
       <slot />
     </v-main>
   </v-app>

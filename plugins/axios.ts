@@ -10,22 +10,6 @@ export default defineNuxtPlugin(() => {
     return config
   })
 
-  api.interceptors.response.use((response) => {
-    return response
-  }, async (error) => {
-    const code = parseInt(error.response && error.response.status)
-    if (code === 401) {
-
-      const { data } = await api.post('/users/tokenThere')
-
-      if (data.result === false) {
-        logout()
-        navigateTo('/logreg', { replace: true })
-      }
-    }
-    return Promise.reject(error)
-  })
-
   return {
     provide: {
       api: api
