@@ -8,7 +8,7 @@ const { $debounce, $dayjs } = useNuxtApp()
 const { getQuestionsByLevel } = useQuestionStore()
 const { questions } = storeToRefs(useQuestionStore())
 const { AddPoint, DeductPoint, QuizTotalTimeUpdate, ResetQuizesPoint } = usePointStore()
-const { totalPoint } = storeToRefs(usePointStore())
+const { totalPoint, userPoint } = storeToRefs(usePointStore())
 const { selectedQuiz, quizStartTime, quizEndTime } = storeToRefs(useQuizStore())
 
 
@@ -18,6 +18,7 @@ const questionIndex = ref(0)
 const answerBox = ref(false)
 const answerState = ref(false)
 const selectedOpt = ref(0)
+const countdown = ref(60)
 
 const randomizeQuestion = (() => {
   if (questions.value.length <= 0) {
@@ -44,7 +45,7 @@ const checkTheAnswer = $debounce((id: number) => {
   if (index >= 0) {
     AddPoint(questions.value[0].quiz_id)
   } else {
-    DeductPoint(questions.value[0].quiz_id)
+    // DeductPoint(questions.value[0].quiz_id)
   }
   answerState.value = index >= 0
   answerBox.value = true
@@ -106,6 +107,19 @@ const theOptions = computed(() => {
   return opt
 })
 
+// const randomizeOption = () => {
+//   const y = [...question.value.options]
+//   for (let i = y.length; i > 0; i--) {
+//     const x = Math.floor(Math.random() * i)
+//     opt.push(y[x])
+//     y.splice(x, 1)
+//   }
+// }
+
+const repeatQuestion = () => {
+  answerBox.value = false
+}
+
 randomizeQuestion()
 quizStartTime.value = $dayjs()
 </script>
@@ -119,20 +133,16 @@ quizStartTime.value = $dayjs()
         Total Poin: {{ totalPoint }}
       </v-col>
       <v-col cols="12">
-        <div class="pt-1 pb-4 text-center">
-          Pertanyaan ke {{ questionIndex + 1 }} dari {{ numberOfQuestion }} (Level {{ question.the_level }})
-        </div>
         <div class="greenboard pa-5">
-          <!-- <div>
-            <v-avatar size="62" :color="countdown < 11 ? 'pink' : 'black'" style="margin-top:-70px;" class="text-h5">
-              <span :class="`${countdown > 0 && countdown < 11 ? 'blink-me' : ''}`">
-                {{ countdown }}
-              </span>
-            </v-avatar>
-          </div> -->
+          <div class="mt-n13 text-center">
+            <CounterDown />
+          </div>
           <div class="text-h6 text-center">
             {{ question.question_text }}
           </div>
+        </div>
+        <div class="pt-1 pb-4 text-center">
+          Pertanyaan ke {{ questionIndex + 1 }} dari {{ numberOfQuestion }} (Level {{ question.the_level }})
         </div>
       </v-col>
       <v-col v-for="(row, i) in theOptions" cols="12">
@@ -142,6 +152,7 @@ quizStartTime.value = $dayjs()
           {{ String.fromCharCode(65 + i) }}: {{ row.the_text }}
         </div>
       </v-col>
+      {{ userPoint }}
     </v-row>
   </v-container>
   <v-footer v-if="questions.length" color="yellow-lighten-5">
@@ -151,21 +162,6 @@ quizStartTime.value = $dayjs()
     <v-btn disabled size="large" variant="elevated" append-icon="i-mdi-car-emergency" class="ma-3">Bantuan</v-btn>
   </v-footer>
 
-  <AnswerDialog :dialog="answerBox" :answerstate="answerState" @clicknext="nextQuestion()" />
+  <AnswerDialog :dialog="answerBox" :answerstate="answerState" @clicknext="nextQuestion()" @repeat="repeatQuestion()" />
 
-
-  <!-- <v-dialog v-model="answerBox" persistent max-width="300">
-    <v-card :color="answerState ? 'green' : 'red'">
-      <v-card-text class="text-center">
-        <v-icon :icon="answerState ? 'i-mdi-check-decagram' : 'i-mdi-alert-decagram'" size="50"></v-icon>
-        <h1>Jawaban {{ answerState ? 'Benar' : 'Salah' }}</h1>
-        <div>{{ answerState ? 'Bertambah' : 'Berkurang' }} satu poin</div>
-      </v-card-text>
-      <v-card-actions>
-        <v-btn color=" white" rounded="xl" variant="flat"
-          :class="`${answerState ? 'text-green' : 'text-red'} text-capitalize`" @click="nextQuestion()"
-          append-icon="i-mdi-arrow-right">Lanjutkan</v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog> -->
 </template>

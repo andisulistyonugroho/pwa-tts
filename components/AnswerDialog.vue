@@ -3,7 +3,7 @@ const props = defineProps({
   dialog: { type: Boolean, default: true },
   answerstate: { type: Boolean, default: false }
 })
-const emit = defineEmits(['clicknext'])
+const emit = defineEmits(['clicknext', 'repeat'])
 </script>
 <template>
   <v-dialog v-model="props.dialog" persistent max-width="300">
@@ -15,7 +15,7 @@ const emit = defineEmits(['clicknext'])
       <v-card-actions class="pa-5">
         <div class="w-100">
           <v-btn v-if="!props.answerstate" prepend-icon="i-mdi-reload" block color="black" variant="flat" size="large"
-            class="mb-2" rounded="xl">Ulangi</v-btn>
+            class="mb-2" rounded="xl" @click="emit('repeat')">Ulangi</v-btn>
           <v-btn block rounded="xl" variant="flat" size="large" class="text-gree" @click="emit('clicknext')"
             append-icon="i-mdi-arrow-right">
             {{ props.answerstate ? 'Lanjutkan' : 'Skip' }}
