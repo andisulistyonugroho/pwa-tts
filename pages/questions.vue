@@ -7,7 +7,7 @@ const { $debounce, $dayjs } = useNuxtApp()
 
 const { getQuestionsByLevel } = useQuestionStore()
 const { questions } = storeToRefs(useQuestionStore())
-const { AddPoint, DeductPoint, QuizTotalTimeUpdate, ResetQuizesPoint } = usePointStore()
+const { AddPoint, Skip, QuizTotalTimeUpdate, ResetQuizesPoint } = usePointStore()
 const { totalPoint, userPoint } = storeToRefs(usePointStore())
 const { selectedQuiz, quizStartTime, quizEndTime } = storeToRefs(useQuizStore())
 
@@ -18,7 +18,7 @@ const questionIndex = ref(0)
 const answerBox = ref(false)
 const answerState = ref(false)
 const selectedOpt = ref(0)
-const countdown = ref(60)
+const counter = ref()
 
 const randomizeQuestion = (() => {
   if (questions.value.length <= 0) {
@@ -40,6 +40,10 @@ const randomizeQuestion = (() => {
 })
 
 const checkTheAnswer = $debounce((id: number) => {
+
+  // pause counter
+  counter.value.pauseCount()
+
   selectedOpt.value = id
   const index = theOptions.value.findIndex(obj => obj.id === id && obj.is_correct === true)
   if (index >= 0) {
@@ -73,6 +77,8 @@ const nextQuestion = $debounce(async () => {
     randomizeQuestion()
     questionIndex.value = 0
   }
+
+  counter.value.doCount()
 }, 1000, { leading: true, trailing: false })
 
 const exitQuiz = $debounce(() => {
@@ -107,17 +113,17 @@ const theOptions = computed(() => {
   return opt
 })
 
-// const randomizeOption = () => {
-//   const y = [...question.value.options]
-//   for (let i = y.length; i > 0; i--) {
-//     const x = Math.floor(Math.random() * i)
-//     opt.push(y[x])
-//     y.splice(x, 1)
-//   }
-// }
-
 const repeatQuestion = () => {
   answerBox.value = false
+  counter.value.resumeCount()
+}
+
+const skipQuestion = () => {
+  if (!selectedQuiz.value) return
+
+  answerBox.value = false
+  Skip(selectedQuiz.value.id)
+  nextQuestion()
 }
 
 randomizeQuestion()
@@ -135,7 +141,7 @@ quizStartTime.value = $dayjs()
       <v-col cols="12">
         <div class="greenboard pa-5">
           <div class="mt-n13 text-center">
-            <CounterDown />
+            <CounterDown ref="counter" />
           </div>
           <div class="text-h6 text-center">
             {{ question.question_text }}
@@ -152,7 +158,7 @@ quizStartTime.value = $dayjs()
           {{ String.fromCharCode(65 + i) }}: {{ row.the_text }}
         </div>
       </v-col>
-      {{ userPoint }}
+      <!-- {{ userPoint }} -->
     </v-row>
   </v-container>
   <v-footer v-if="questions.length" color="yellow-lighten-5">
@@ -162,6 +168,7 @@ quizStartTime.value = $dayjs()
     <v-btn disabled size="large" variant="elevated" append-icon="i-mdi-car-emergency" class="ma-3">Bantuan</v-btn>
   </v-footer>
 
-  <AnswerDialog :dialog="answerBox" :answerstate="answerState" @clicknext="nextQuestion()" @repeat="repeatQuestion()" />
+  <AnswerDialog :dialog="answerBox" :answerstate="answerState" @clicknext="nextQuestion()" @repeat="repeatQuestion()"
+    @skip="skipQuestion()" />
 
 </template>

@@ -37,6 +37,10 @@ export const usePointStore = defineStore('point', () => {
     quizPointUpdate(quiz_id, 'deduct')
   }
 
+  const Skip = (quiz_id: number) => {
+    quizPointUpdate(quiz_id, 'skip')
+  }
+
   const quizPointUpdate = (quiz_id: number, action: string) => {
     const found = userPoint.value?.find(obj => obj.topic_id === topicDetail.value.id)
     const point = found?.quiz_point.find(obj => obj.quiz_id === quiz_id)
@@ -114,7 +118,7 @@ export const usePointStore = defineStore('point', () => {
 
   return {
     AddPoint, DeductPoint, ResetQuizesPoint, NewQuizPoint,
-    InitializePointForTopic, QuizTotalTimeUpdate,
+    InitializePointForTopic, QuizTotalTimeUpdate, Skip,
     totalPoint, userPoint
   }
 })

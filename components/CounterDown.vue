@@ -1,11 +1,10 @@
 <script setup lang="ts">
-const props = defineProps({
-  startFrom: { type: Number, default: 60 }
-})
-const countdown = ref(props.startFrom)
+const countdown = ref(0)
 const theInterval = ref()
+
 const doCount = () => {
   clearInterval(theInterval.value)
+  countdown.value = 30
   if (countdown.value > 0) {
     theInterval.value = setInterval(() => {
       if (countdown.value <= 0) {
@@ -17,7 +16,29 @@ const doCount = () => {
   }
 }
 
-doCount()
+const pauseCount = () => {
+  clearInterval(theInterval.value)
+}
+
+const resumeCount = () => {
+  theInterval.value = setInterval(() => {
+    if (countdown.value <= 0) {
+      clearInterval(theInterval.value)
+    } else {
+      countdown.value--
+    }
+  }, 1000)
+}
+
+const addTime = () => {
+  countdown.value += 10
+}
+
+defineExpose({
+  doCount, pauseCount, resumeCount, addTime
+})
+
+doCount()  
 </script>
 <template>
   <v-avatar size="62" :color="countdown < 11 ? 'pink' : 'black'" class="text-h5">
