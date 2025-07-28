@@ -73,18 +73,7 @@ export default defineNuxtConfig({
     }
   },
   css: ['@/assets/main.scss'],
-  modules: [
-    '@nuxt/eslint',
-    '@nuxt/test-utils',
-    '@nuxt/image',
-    'vuetify-nuxt-module',
-    'dayjs-nuxt',
-    '@pinia/nuxt',
-    '@pinia-plugin-persistedstate/nuxt',
-    '@unocss/nuxt',
-    '@vite-pwa/nuxt',
-    '@nuxtjs/device'
-  ],
+  modules: ['@nuxt/eslint', '@nuxt/test-utils', '@nuxt/image', 'vuetify-nuxt-module', 'dayjs-nuxt', '@pinia/nuxt', '@pinia-plugin-persistedstate/nuxt', '@unocss/nuxt', '@vite-pwa/nuxt', '@nuxtjs/device', '@nuxtjs/storybook'],
   pwa: {
     strategies: 'generateSW',
     registerType: 'autoUpdate',

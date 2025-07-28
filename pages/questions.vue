@@ -8,7 +8,7 @@ const { $debounce, $dayjs } = useNuxtApp()
 const { getQuestionsByLevel } = useQuestionStore()
 const { questions } = storeToRefs(useQuestionStore())
 const { AddPoint, DeductPoint, QuizTotalTimeUpdate, ResetQuizesPoint } = usePointStore()
-const { totalPoint, userPoint } = storeToRefs(usePointStore())
+const { totalPoint } = storeToRefs(usePointStore())
 const { selectedQuiz, quizStartTime, quizEndTime } = storeToRefs(useQuizStore())
 
 
@@ -57,7 +57,6 @@ const nextQuestion = $debounce(async () => {
   if (!selectedQuiz.value) return
 
   answerBox.value = false
-  answerState.value = false
   selectedOpt.value = 0
 
   if (questionIndex.value < numberOfQuestion.value - 1) {
@@ -152,8 +151,10 @@ quizStartTime.value = $dayjs()
     <v-btn disabled size="large" variant="elevated" append-icon="i-mdi-car-emergency" class="ma-3">Bantuan</v-btn>
   </v-footer>
 
+  <AnswerDialog :dialog="answerBox" :answerstate="answerState" @clicknext="nextQuestion()" />
 
-  <v-dialog v-model="answerBox" persistent max-width="300">
+
+  <!-- <v-dialog v-model="answerBox" persistent max-width="300">
     <v-card :color="answerState ? 'green' : 'red'">
       <v-card-text class="text-center">
         <v-icon :icon="answerState ? 'i-mdi-check-decagram' : 'i-mdi-alert-decagram'" size="50"></v-icon>
@@ -166,5 +167,5 @@ quizStartTime.value = $dayjs()
           append-icon="i-mdi-arrow-right">Lanjutkan</v-btn>
       </v-card-actions>
     </v-card>
-  </v-dialog>
+  </v-dialog> -->
 </template>
