@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const emit = defineEmits(['timesup'])
 const countdown = ref(0)
 const theInterval = ref()
 
@@ -9,6 +10,7 @@ const doCount = () => {
     theInterval.value = setInterval(() => {
       if (countdown.value <= 0) {
         clearInterval(theInterval.value)
+        emit('timesup')
       } else {
         countdown.value--
       }

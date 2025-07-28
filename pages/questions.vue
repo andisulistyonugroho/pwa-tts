@@ -17,6 +17,7 @@ const randomQuestion = ref(questions)
 const questionIndex = ref(0)
 const answerBox = ref(false)
 const answerState = ref(false)
+const timesupD = ref(false)
 const selectedOpt = ref(0)
 const counter = ref()
 
@@ -121,9 +122,17 @@ const repeatQuestion = () => {
 const skipQuestion = () => {
   if (!selectedQuiz.value) return
 
-  answerBox.value = false
+  answerBox.value = timesupD.value = false
   Skip(selectedQuiz.value.id)
   nextQuestion()
+}
+
+const timesUp = () => {
+  timesupD.value = true
+}
+
+const timesUpRepeat = () => {
+
 }
 
 randomizeQuestion()
@@ -141,7 +150,7 @@ quizStartTime.value = $dayjs()
       <v-col cols="12">
         <div class="greenboard pa-5">
           <div class="mt-n13 text-center">
-            <CounterDown ref="counter" />
+            <CounterDown ref="counter" @timesup="timesUp()" />
           </div>
           <div class="text-h6 text-center">
             {{ question.question_text }}
@@ -158,7 +167,6 @@ quizStartTime.value = $dayjs()
           {{ String.fromCharCode(65 + i) }}: {{ row.the_text }}
         </div>
       </v-col>
-      <!-- {{ userPoint }} -->
     </v-row>
   </v-container>
   <v-footer v-if="questions.length" color="yellow-lighten-5">
@@ -170,5 +178,6 @@ quizStartTime.value = $dayjs()
 
   <AnswerDialog :dialog="answerBox" :answerstate="answerState" @clicknext="nextQuestion()" @repeat="repeatQuestion()"
     @skip="skipQuestion()" />
+  <TimesUp :dialog="timesupD" @skip="skipQuestion()" @repeat="timeupRepeat()" />
 
 </template>
