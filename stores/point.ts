@@ -32,9 +32,14 @@ export const usePointStore = defineStore('point', () => {
     quizPointUpdate(quiz_id, 'add')
   }
 
-  const DeductPoint = (quiz_id: number) => {
+  const DeductPoint = (quiz_id: number, qty: number) => {
     totalPoint.value -= 1
-    quizPointUpdate(quiz_id, 'deduct')
+    const point = getPointInQuiz(quiz_id)
+
+    if (point) {
+      const prevState = point
+      point.total_point = prevState.total_point - qty
+    }
   }
 
   const Skip = (quiz_id: number) => {
@@ -42,8 +47,7 @@ export const usePointStore = defineStore('point', () => {
   }
 
   const quizPointUpdate = (quiz_id: number, action: string) => {
-    const found = userPoint.value?.find(obj => obj.topic_id === topicDetail.value.id)
-    const point = found?.quiz_point.find(obj => obj.quiz_id === quiz_id)
+    const point = getPointInQuiz(quiz_id)
 
     if (point) {
       const prevState = point
@@ -61,9 +65,9 @@ export const usePointStore = defineStore('point', () => {
   }
 
   const QuizTotalTimeUpdate = (startTime: Dayjs, endTime: Dayjs) => {
-    const found = userPoint.value?.find(obj => obj.topic_id === topicDetail.value.id)
-    const point = found?.quiz_point.find(obj => obj.quiz_id === selectedQuiz.value?.id)
+    if (!selectedQuiz.value) return
 
+    const point = getPointInQuiz(selectedQuiz.value.id)
     if (point) {
       const totalTime = endTime.diff(startTime) //in milliseconds
       point.total_time = totalTime
@@ -73,8 +77,7 @@ export const usePointStore = defineStore('point', () => {
   const ResetQuizesPoint = () => {
     if (!selectedQuiz.value) return
 
-    const topic = userPoint.value?.find(obj => obj.topic_id === topicDetail.value.id)
-    const point = topic?.quiz_point.find(obj => obj.quiz_id === selectedQuiz.value?.id)
+    const point = getPointInQuiz(selectedQuiz.value.id)
 
     if (point) {
       point.correct_answer = 0
@@ -115,6 +118,11 @@ export const usePointStore = defineStore('point', () => {
     return quizId
   }
 
+  const getPointInQuiz = (quiz_id: number) => {
+    const found = userPoint.value?.find(obj => obj.topic_id === topicDetail.value.id)
+    const point = found?.quiz_point.find(obj => obj.quiz_id === quiz_id)
+    return point
+  }
 
   return {
     AddPoint, DeductPoint, ResetQuizesPoint, NewQuizPoint,

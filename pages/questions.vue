@@ -49,8 +49,6 @@ const checkTheAnswer = $debounce((id: number) => {
   const index = theOptions.value.findIndex(obj => obj.id === id && obj.is_correct === true)
   if (index >= 0) {
     AddPoint(questions.value[0].quiz_id)
-  } else {
-    // DeductPoint(questions.value[0].quiz_id)
   }
   answerState.value = index >= 0
   answerBox.value = true
@@ -131,8 +129,9 @@ const timesUp = () => {
   timesupD.value = true
 }
 
-const timesUpRepeat = () => {
-
+const timesupRepeat = () => {
+  timesupD.value = false
+  counter.value.doCount()
 }
 
 randomizeQuestion()
@@ -168,6 +167,7 @@ quizStartTime.value = $dayjs()
         </div>
       </v-col>
     </v-row>
+    {{ userPoint }}
   </v-container>
   <v-footer v-if="questions.length" color="yellow-lighten-5">
     <v-btn size="large" variant="elevated" color="pink" prepend-icon="i-mdi-exit-run" class="ma-3"
@@ -178,6 +178,6 @@ quizStartTime.value = $dayjs()
 
   <AnswerDialog :dialog="answerBox" :answerstate="answerState" @clicknext="nextQuestion()" @repeat="repeatQuestion()"
     @skip="skipQuestion()" />
-  <TimesUp :dialog="timesupD" @skip="skipQuestion()" @repeat="timeupRepeat()" />
+  <TimesUp :dialog="timesupD" @skip="skipQuestion()" @repeat="timesupRepeat()" />
 
 </template>
