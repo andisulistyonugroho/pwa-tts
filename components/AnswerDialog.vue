@@ -3,18 +3,58 @@ const props = defineProps({
   dialog: { type: Boolean, default: true },
   answerstate: { type: Boolean, default: false }
 })
-const emit = defineEmits(['clicknext', 'repeat', 'skip', 'r2o'])
+const { DeductPoint } = usePointStore()
+const { totalPoint } = storeToRefs(usePointStore())
+const { selectedQuiz } = storeToRefs(useQuizStore())
+
+const emit = defineEmits(['clicknext', 'repeat', 'skip', 'r2o', 'moretime'])
+
 const repeated = ref(false)
+const r2oed = ref(false)
+const moreTime = ref(false)
 
 watch(props, (n, o) => {
   if (n.answerstate) {
     repeated.value = false
+    r2oed.value = false
+    moreTime.value = false
   }
 })
 
 const doRepeat = () => {
   repeated.value = true
   emit('repeat')
+}
+
+const doSkip = () => {
+  repeated.value = false
+  r2oed.value = false
+  moreTime.value = false
+  emit('skip')
+}
+
+const doR2o = () => {
+  if (totalPoint.value <= 0) {
+    alert('tidak cukup poin')
+    return
+  }
+  const poin2deduct = 2
+  DeductPoint(selectedQuiz.value.id, poin2deduct)
+
+  r2oed.value = true
+  emit('r2o')
+}
+
+const doMoreTime = () => {
+  if (totalPoint.value <= 0) {
+    alert('tidak cukup poin')
+    return
+  }
+  const poin2deduct = 1
+  DeductPoint(selectedQuiz.value.id, poin2deduct)
+
+  moreTime.value = true
+  emit('moretime')
 }
 </script>
 <template>
@@ -29,14 +69,14 @@ const doRepeat = () => {
           <template v-if="!props.answerstate">
             <v-btn :disabled="repeated" prepend-icon="i-mdi-reload" block :color="repeated ? '' : 'black'"
               variant="flat" size="large" class="mb-2" rounded="xl" @click="doRepeat()">Coba lagi</v-btn>
-            <v-btn prepend-icon="i-mdi-timer-plus-outline" block color="pink" variant="flat" rounded="xl" class="mb-2"
-              size="large">tambah 25 detik
+            <v-btn :disabled="moreTime" prepend-icon="i-mdi-timer-plus-outline" block :color="moreTime ? '' : 'pink'"
+              variant="flat" rounded="xl" class="mb-2" size="large" @click="doMoreTime()">tambah 10 detik
               (<v-icon icon="i-mdi-star" size="x-small" />)</v-btn>
-            <v-btn prepend-icon="i-mdi-content-cut" block color="purple" variant="flat" rounded="xl" class="mb-2"
-              size="large" @click="emit('r2o')">50:50
+            <v-btn :disabled="r2oed" prepend-icon="i-mdi-content-cut" block :color="r2oed ? '' : 'purple'"
+              variant="flat" rounded="xl" class="mb-2" size="large" @click="doR2o()">50:50
               (<v-icon icon="i-mdi-star" size="x-small" /><v-icon icon="i-mdi-star" size="x-small" />)</v-btn>
-            <v-btn block rounded="xl" variant="flat" size="large" color="white" class="text-red"
-              @click="repeated = false; emit('skip')" append-icon="i-mdi-arrow-right">
+            <v-btn block rounded="xl" variant="flat" size="large" color="white" class="text-red" @click="doSkip()"
+              append-icon="i-mdi-arrow-right">
               Skip
             </v-btn>
           </template>

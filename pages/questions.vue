@@ -142,8 +142,6 @@ const remove2Option = () => {
   const correctOne = theQuestion.options.find(obj => obj.is_correct === true)
   const wrongOne = theQuestion.options.find(obj => obj.id === wrongOptionId.value)
 
-
-
   let arrIndexes = theQuestion.options.map(obj => obj.id)
   arrIndexes = arrIndexes.filter(obj => obj !== correctOne?.id && obj !== wrongOne?.id)
 
@@ -154,6 +152,11 @@ const remove2Option = () => {
 
   randomQuestion.value[questionIndex.value].options = [one, two]
   repeatQuestion()
+}
+
+const addMoreTime = () => {
+  answerBox.value = false
+  counter.value.addTime()
 }
 
 randomizeQuestion()
@@ -198,7 +201,7 @@ quizStartTime.value = $dayjs()
   </v-footer>
 
   <AnswerDialog :dialog="answerBox" :answerstate="answerState" @clicknext="nextQuestion()" @repeat="repeatQuestion()"
-    @r2o="remove2Option()" @skip="skipQuestion()" />
+    @r2o="remove2Option()" @skip="skipQuestion()" @moretime="addMoreTime()" />
   <TimesUp :dialog="timesupD" @skip="skipQuestion()" @repeat="timesupRepeat()" />
 
 </template>

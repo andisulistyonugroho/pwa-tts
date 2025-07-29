@@ -4,7 +4,7 @@ const props = defineProps({
 })
 const emit = defineEmits(['skip', 'repeat'])
 const { DeductPoint } = usePointStore()
-const { userPoint, totalPoint } = storeToRefs(usePointStore())
+const { totalPoint } = storeToRefs(usePointStore())
 const { selectedQuiz } = storeToRefs(useQuizStore())
 const loading = ref(false)
 
@@ -24,10 +24,10 @@ const doRepeat = () => {
 </script>
 <template>
   <v-dialog v-model="props.dialog" persistent max-width="300">
-    <v-card color="red">
+    <v-card>
       <v-card-text class="text-center pa-0">
         <div class="text-h4 mt-5">Habis waktu</div>
-        <v-icon icon="i-mdi-timer-cancel-outline" size="250" class="ma-0 pa-0"></v-icon>
+        <v-icon icon="i-mdi-timer-cancel-outline" size="250" class="ma-0 pa-0" color="red"></v-icon>
       </v-card-text>
       <v-card-actions class="pa-5">
         <div class="w-100">

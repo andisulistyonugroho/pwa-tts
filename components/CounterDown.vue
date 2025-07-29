@@ -5,7 +5,7 @@ const theInterval = ref()
 
 const doCount = () => {
   clearInterval(theInterval.value)
-  countdown.value = 10
+  countdown.value = 30
   if (countdown.value > 0) {
     resumeCount()
   }
