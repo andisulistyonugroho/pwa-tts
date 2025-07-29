@@ -37,7 +37,6 @@ const doRepeat = () => {
             append-icon="i-mdi-arrow-right" :loading="loading">
             Skip
           </v-btn>
-          {{ userPoint }}
         </div>
       </v-card-actions>
     </v-card>

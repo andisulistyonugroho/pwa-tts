@@ -143,7 +143,7 @@ quizStartTime.value = $dayjs()
       <v-col cols="12" class="text-h5 text-center"></v-col>
     </v-row>
     <v-row align-self="start">
-      <v-col cols="12" class="text-center text-h5">
+      <v-col cols="12" class="text-center text-h5 mb-3">
         Total Poin: {{ totalPoint }}
       </v-col>
       <v-col cols="12">
