@@ -7,14 +7,7 @@ const doCount = () => {
   clearInterval(theInterval.value)
   countdown.value = 10
   if (countdown.value > 0) {
-    theInterval.value = setInterval(() => {
-      if (countdown.value <= 0) {
-        clearInterval(theInterval.value)
-        emit('timesup')
-      } else {
-        countdown.value--
-      }
-    }, 1000)
+    resumeCount()
   }
 }
 
@@ -26,6 +19,7 @@ const resumeCount = () => {
   theInterval.value = setInterval(() => {
     if (countdown.value <= 0) {
       clearInterval(theInterval.value)
+      emit('timesup')
     } else {
       countdown.value--
     }

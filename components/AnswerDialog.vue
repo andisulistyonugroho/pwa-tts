@@ -3,7 +3,7 @@ const props = defineProps({
   dialog: { type: Boolean, default: true },
   answerstate: { type: Boolean, default: false }
 })
-const emit = defineEmits(['clicknext', 'repeat', 'skip'])
+const emit = defineEmits(['clicknext', 'repeat', 'skip', 'r2o'])
 const repeated = ref(false)
 
 watch(props, (n, o) => {
@@ -33,7 +33,7 @@ const doRepeat = () => {
               size="large">tambah 25 detik
               (<v-icon icon="i-mdi-star" size="x-small" />)</v-btn>
             <v-btn prepend-icon="i-mdi-content-cut" block color="purple" variant="flat" rounded="xl" class="mb-2"
-              size="large">50:50
+              size="large" @click="emit('r2o')">50:50
               (<v-icon icon="i-mdi-star" size="x-small" /><v-icon icon="i-mdi-star" size="x-small" />)</v-btn>
             <v-btn block rounded="xl" variant="flat" size="large" color="white" class="text-red"
               @click="repeated = false; emit('skip')" append-icon="i-mdi-arrow-right">

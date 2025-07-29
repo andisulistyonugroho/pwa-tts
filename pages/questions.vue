@@ -20,6 +20,7 @@ const answerState = ref(false)
 const timesupD = ref(false)
 const selectedOpt = ref(0)
 const counter = ref()
+const wrongOptionId = ref(-1)
 
 const randomizeQuestion = (() => {
   if (questions.value.length <= 0) {
@@ -49,6 +50,8 @@ const checkTheAnswer = $debounce((id: number) => {
   const index = theOptions.value.findIndex(obj => obj.id === id && obj.is_correct === true)
   if (index >= 0) {
     AddPoint(questions.value[0].quiz_id)
+  } else {
+    wrongOptionId.value = id
   }
   answerState.value = index >= 0
   answerBox.value = true
@@ -134,6 +137,25 @@ const timesupRepeat = () => {
   counter.value.doCount()
 }
 
+const remove2Option = () => {
+  const theQuestion = randomQuestion.value[questionIndex.value]
+  const correctOne = theQuestion.options.find(obj => obj.is_correct === true)
+  const wrongOne = theQuestion.options.find(obj => obj.id === wrongOptionId.value)
+
+
+
+  let arrIndexes = theQuestion.options.map(obj => obj.id)
+  arrIndexes = arrIndexes.filter(obj => obj !== correctOne?.id && obj !== wrongOne?.id)
+
+  const one = correctOne
+  const two = theQuestion.options.find(obj => obj.id === arrIndexes[0])
+
+  if (!one || !two) return
+
+  randomQuestion.value[questionIndex.value].options = [one, two]
+  repeatQuestion()
+}
+
 randomizeQuestion()
 quizStartTime.value = $dayjs()
 </script>
@@ -167,7 +189,6 @@ quizStartTime.value = $dayjs()
         </div>
       </v-col>
     </v-row>
-    {{ userPoint }}
   </v-container>
   <v-footer v-if="questions.length" color="yellow-lighten-5">
     <v-btn size="large" variant="elevated" color="pink" prepend-icon="i-mdi-exit-run" class="ma-3"
@@ -177,7 +198,7 @@ quizStartTime.value = $dayjs()
   </v-footer>
 
   <AnswerDialog :dialog="answerBox" :answerstate="answerState" @clicknext="nextQuestion()" @repeat="repeatQuestion()"
-    @skip="skipQuestion()" />
+    @r2o="remove2Option()" @skip="skipQuestion()" />
   <TimesUp :dialog="timesupD" @skip="skipQuestion()" @repeat="timesupRepeat()" />
 
 </template>
