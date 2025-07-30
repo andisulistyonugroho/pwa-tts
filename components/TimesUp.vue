@@ -26,7 +26,7 @@ const doRepeat = () => {
   <v-dialog v-model="props.dialog" persistent max-width="300">
     <v-card>
       <v-card-text class="text-center pa-0">
-        <div class="text-h4 mt-5">Habis waktu</div>
+        <div class="text-h4 mt-5">waktu habis</div>
         <v-icon icon="i-mdi-timer-cancel-outline" size="250" class="ma-0 pa-0" color="red"></v-icon>
       </v-card-text>
       <v-card-actions class="pa-5">

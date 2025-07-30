@@ -80,7 +80,7 @@ const doNextChapter = $debounce(() => {
           <span class="text-h6 text-error mx-3">Salah {{ wrongAnswer }}</span>
         </div>
         <div class="mt-12">
-          <template v-if="result?.correct_answer === result?.num_of_question">
+          <template v-if="result && result.num_of_question > 0 && result?.correct_answer === result?.num_of_question">
             <v-btn size="x-large" class="text-h4" append-icon="i-mdi-chevron-double-right"
               @click="doNextChapter()">Lanjut</v-btn>
           </template>
