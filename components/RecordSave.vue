@@ -1,19 +1,19 @@
 <script setup lang="ts">
-const { $debounce } = useNuxtApp()
 const props = defineProps({
   dialog: { type: Boolean, default: false },
   point: { type: Number, default: 0 }
 })
+const { $debounce } = useNuxtApp()
 
 const emit = defineEmits(['closeit'])
-const { SaveRecord } = useRankStore()
+const { DoSaveRecord } = useRankinStore()
 
 const form = ref()
 const username = ref('')
 
 const doSave = $debounce(async () => {
   try {
-    await SaveRecord('oke')
+    await DoSaveRecord()
   } catch (error) {
     alert(error)
   }
@@ -26,7 +26,7 @@ const doSave = $debounce(async () => {
       <v-card-text>
         <v-form ref="form">
           <v-text-field readonly label="Poin" v-model="props.point" />
-          <v-text-field label="Nama pemain" v-model="username" :rules="[(v) => !!v || 'Harus diisi']" />
+          <v-text-field label="Nama pemain" v-model="username" :rules="[(v: any) => !!v || 'Harus diisi']" />
         </v-form>
       </v-card-text>
       <v-card-actions>

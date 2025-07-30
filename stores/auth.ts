@@ -28,10 +28,5 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   return { setUser, setProfile, setRole, logout, user }
-}, {
-  persist: {
-    storage: persistedState.localStorage,
-    key: 'pwtts'
-  }
 }
 )

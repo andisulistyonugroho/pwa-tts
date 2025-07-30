@@ -1,4 +1,4 @@
-<script setup type="ts">
+<script setup lang="ts">
 const props = defineProps({
   dialog: { type: Boolean, default: true },
   answerstate: { type: Boolean, default: false }
@@ -38,6 +38,8 @@ const doR2o = () => {
     alert('tidak cukup poin')
     return
   }
+  if (!selectedQuiz.value) return
+
   const poin2deduct = 2
   DeductPoint(selectedQuiz.value.id, poin2deduct)
 
@@ -50,6 +52,8 @@ const doMoreTime = () => {
     alert('tidak cukup poin')
     return
   }
+  if (!selectedQuiz.value) return
+
   const poin2deduct = 1
   DeductPoint(selectedQuiz.value.id, poin2deduct)
 

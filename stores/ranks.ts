@@ -3,10 +3,11 @@
 // computed()s become getters
 // function()s become actions
 
-export const useRankStore = defineStore('rank', () => {
+export const useRankinStore = defineStore('ranks', () => {
 
   const { $api } = useNuxtApp()
-  const SaveRecord = async (payload: string) => {
+
+  const DoSaveRecord = async () => {
     try {
       await $api.post('/ranks')
       return Promise.resolve(true)
@@ -14,7 +15,8 @@ export const useRankStore = defineStore('rank', () => {
       return Promise.reject(error)
     }
   }
+
   return {
-    SaveRecord
+    DoSaveRecord
   }
 })

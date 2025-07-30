@@ -1,4 +1,4 @@
-<script setup type="ts">
+<script setup lang="ts">
 const props = defineProps({
   dialog: { type: Boolean, default: true }
 })
@@ -9,6 +9,8 @@ const { selectedQuiz } = storeToRefs(useQuizStore())
 const loading = ref(false)
 
 const doRepeat = () => {
+  if (!selectedQuiz.value) return
+
   loading.value = true
   if (totalPoint.value <= 0) {
     alert('tidak cukup poin')
