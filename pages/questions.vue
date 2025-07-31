@@ -85,6 +85,7 @@ const nextQuestion = $debounce(async () => {
 
 const exitQuiz = $debounce(() => {
   ResetQuizesPoint()
+  totalPoint.value = 0
   navigateTo('/quiz', { replace: true })
 }, 1000, { leading: true, trailing: false })
 

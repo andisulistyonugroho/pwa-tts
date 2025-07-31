@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@nuxtjs/storybook'
-import RecordSave from './RecordSave.vue'
+import RecordSave from './Scoreboard.vue'
 
 const meta = {
   title: 'RecordSave',

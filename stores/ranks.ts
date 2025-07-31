@@ -5,11 +5,34 @@
 
 export const useRankinStore = defineStore('ranks', () => {
 
-  const { $api } = useNuxtApp()
+  const { $api, $dayjs } = useNuxtApp()
 
-  const DoSaveRecord = async () => {
+  const ranks = ref<Rank[]>([])
+
+  const FreeSaveRecord = async (payload: Rank) => {
     try {
-      await $api.post('/ranks')
+      if (payload.playername === '' || payload.topic_id === 0 || payload.quiz_id === 0 || payload.total_point <= 0) return Promise.resolve(true)
+
+      await $api.post('/ranks', {
+        playername: payload.playername,
+        topic_id: payload.topic_id,
+        quiz_id: payload.quiz_id,
+        point: payload.total_point
+      })
+      return Promise.resolve(true)
+    } catch (error) {
+      return Promise.reject(error)
+    }
+  }
+
+  const GetFreeRecordInQuiz = async (payload: { topic_id: number, quiz_id: number }) => {
+    try {
+      const { data } = await $api.get('/ranks', {
+        params: {
+          topic_id: payload.topic_id, quiz_id: payload.quiz_id
+        }
+      })
+      ranks.value = data
       return Promise.resolve(true)
     } catch (error) {
       return Promise.reject(error)
@@ -17,6 +40,7 @@ export const useRankinStore = defineStore('ranks', () => {
   }
 
   return {
-    DoSaveRecord
+    FreeSaveRecord, GetFreeRecordInQuiz,
+    ranks
   }
 })
