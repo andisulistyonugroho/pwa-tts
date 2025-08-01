@@ -2,7 +2,7 @@
 definePageMeta({
   layout: 'empty'
 })
-const { $dayjs, $debounce } = useNuxtApp()
+const { $debounce } = useNuxtApp()
 
 const { ResetQuizesPoint, NewQuizPoint } = usePointStore()
 const { getQuestionsByLevel } = useQuestionStore()
@@ -36,14 +36,6 @@ const result = computed(() => {
 const wrongAnswer = computed(() => {
   if (result.value) {
     return result.value.num_of_question - result.value.correct_answer
-  }
-  return 0
-})
-
-const duration = computed(() => {
-  if (result.value) {
-    const theDuration = $dayjs.duration(result.value.total_time)
-    return theDuration.minutes() + ' menit ' + theDuration.seconds() + ' detik'
   }
   return 0
 })
@@ -98,9 +90,9 @@ const closeScoreBoard = () => {
             {{ result?.total_point }}
           </v-avatar>
         </div>
-        <div class="text-h4">{{ topic.topic_title }}</div>
-        <div class="text-h5">#{{ selectedQuiz.title }}</div>
-        <div class="text-h6">Durasi: {{ duration }}</div>
+        <div class="text-h4">{{ topic?.topic_title }}</div>
+        <div class="text-h5">#{{ selectedQuiz?.title }}</div>
+        <div class="text-h6">Durasi: {{ toDuration(result ? result.total_time : 0) }}</div>
         <div class="text-h6">Jumlah Soal: {{ result?.num_of_question }}</div>
         <div>
           <span class="text-h6 text-green-darken-2 mx-3">Benar: {{ result?.correct_answer }}</span>
@@ -127,6 +119,6 @@ const closeScoreBoard = () => {
       </v-col>
     </v-row>
   </v-container>
-  <LazyScoreboard :dialog="scoreboardDialog" :topicid="topic.topic_id" :quizid="result.quiz_id"
+  <LazyScoreboard :dialog="scoreboardDialog" :topicid="topic?.topic_id" :quizid="result?.quiz_id"
     @closeit="closeScoreBoard()" />
 </template>

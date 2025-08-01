@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from '@nuxtjs/storybook'
-import RecordSave from './Scoreboard.vue'
+import Scoreboard from './Scoreboard.vue'
 
 const meta = {
-  title: 'RecordSave',
-  component: RecordSave
-} satisfies Meta<typeof RecordSave>
+  title: 'Scoreboard',
+  component: Scoreboard
+} satisfies Meta<typeof Scoreboard>
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const TheRecordSave: Story = {
+export const TheScoreboard: Story = {
   args: {},
 }
