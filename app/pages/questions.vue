@@ -8,7 +8,7 @@ const { $debounce, $dayjs } = useNuxtApp()
 const { getQuestionsByLevel } = useQuestionStore()
 const { questions } = storeToRefs(useQuestionStore())
 const { AddPoint, Skip, QuizTotalTimeUpdate, ResetQuizesPoint } = usePointStore()
-const { totalPoint, userPoint } = storeToRefs(usePointStore())
+const { totalPoint } = storeToRefs(usePointStore())
 const { selectedQuiz, quizStartTime, quizEndTime } = storeToRefs(useQuizStore())
 
 
@@ -185,7 +185,7 @@ quizStartTime.value = $dayjs()
           Pertanyaan ke {{ questionIndex + 1 }} dari {{ numberOfQuestion }} (Level {{ question.the_level }})
         </div>
       </v-col>
-      <v-col v-for="(row, i) in theOptions" cols="12">
+      <v-col v-for="(row, i) in theOptions" :key="row.id" cols="12">
         <div
           :class="`${selectedOpt === row.id ? 'bg-orange' : 'bg-yellow'} pa-2 text-center text-h6 border-thin rounded-xl`"
           @click="checkTheAnswer(row.id)">
@@ -193,16 +193,19 @@ quizStartTime.value = $dayjs()
         </div>
       </v-col>
     </v-row>
+    <v-footer v-if="questions.length" color="yellow-lighten-5">
+      <v-btn size="large" variant="elevated" color="pink" prepend-icon="i-mdi-exit-run" class="ma-3"
+        @click="exitQuiz()">Keluar</v-btn>
+      <v-spacer />
+      <v-btn disabled size="large" variant="elevated" append-icon="i-mdi-car-emergency" class="ma-3">Bantuan</v-btn>
+    </v-footer>
+    <AnswerDialog :dialog="answerBox" :answerstate="answerState" @clicknext="nextQuestion()" @repeat="repeatQuestion()"
+      @r2o="remove2Option()" @skip="skipQuestion()" @moretime="addMoreTime()" />
+    <TimesUp :dialog="timesupD" @skip="skipQuestion()" @repeat="timesupRepeat()" />
   </v-container>
-  <v-footer v-if="questions.length" color="yellow-lighten-5">
-    <v-btn size="large" variant="elevated" color="pink" prepend-icon="i-mdi-exit-run" class="ma-3"
-      @click="exitQuiz()">Keluar</v-btn>
-    <v-spacer></v-spacer>
-    <v-btn disabled size="large" variant="elevated" append-icon="i-mdi-car-emergency" class="ma-3">Bantuan</v-btn>
-  </v-footer>
 
-  <AnswerDialog :dialog="answerBox" :answerstate="answerState" @clicknext="nextQuestion()" @repeat="repeatQuestion()"
-    @r2o="remove2Option()" @skip="skipQuestion()" @moretime="addMoreTime()" />
-  <TimesUp :dialog="timesupD" @skip="skipQuestion()" @repeat="timesupRepeat()" />
+
+
+
 
 </template>

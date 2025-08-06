@@ -1,14 +1,14 @@
 {
-    "editor.defaultFormatter": "Vue.volar",
-    "editor.formatOnSave": true,
-    "editor.tabSize": 2,
-    "[typescript]": {
-        "editor.defaultFormatter": "vscode.typescript-language-features"
-    },
-    "[scss]": {
-        "editor.defaultFormatter": "vscode.css-language-features"
-    },
-    "[jsonc]": {
-        "editor.defaultFormatter": "vscode.json-language-features"
-    },
+  "editor.defaultFormatter": "Vue.volar",
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "[typescript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "[scss]": {
+    "editor.defaultFormatter": "vscode.css-language-features"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  }
 }

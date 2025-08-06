@@ -4,7 +4,7 @@
 // function()s become actions
 import { Dayjs } from 'dayjs'
 export const usePointStore = defineStore('point', () => {
-  const userPoint = ref<UserPoint[]>()
+  const userPoint = ref<UserPoint[]>([])
   const { topicDetail, selectedQuiz, quizzes } = storeToRefs(useQuizStore())
 
   const totalPoint = ref(0)
@@ -17,7 +17,7 @@ export const usePointStore = defineStore('point', () => {
         topic_id: input.topic_id,
         topic_title: input.topic_title,
         quiz_point: [{
-          quiz_id: firstQuiz.id,
+          quiz_id: firstQuiz ? firstQuiz.id : 0,
           num_of_question: 0,
           correct_answer: 0,
           total_point: 0,
@@ -88,7 +88,7 @@ export const usePointStore = defineStore('point', () => {
   }
 
   const NewQuizPoint = () => {
-    const topic = userPoint.value?.find(obj => obj.topic_id === topicDetail.value.id)
+    const topic = userPoint.value.find(obj => obj.topic_id === topicDetail.value.id)
     if (topic) {
 
       const quizId = getNextQuizId()
@@ -105,17 +105,16 @@ export const usePointStore = defineStore('point', () => {
   }
 
   const getNextQuizId = () => {
-    let quizId = 0
-    const theIndex = quizzes.value.findIndex(obj => obj.id === selectedQuiz.value?.id)
-
-    if (theIndex >= 0) {
-      const nextIndex = theIndex + 1
-      if (quizzes.value.length >= theIndex) {
-        quizId = quizzes.value[nextIndex].id
-      }
+    if (!selectedQuiz.value) {
+      return 0
     }
 
-    return quizId
+    const quizid = selectedQuiz.value.id
+    const theindex = quizzes.value.findIndex(obj => obj.id === quizid)
+    const nextIndex = theindex + 1
+
+    const quiz = quizzes.value[nextIndex]
+    return quiz ? quiz.id : 0
   }
 
   const getPointInQuiz = (quiz_id: number) => {

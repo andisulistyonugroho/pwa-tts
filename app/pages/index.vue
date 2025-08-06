@@ -15,7 +15,7 @@ const doStart = () => {
     <v-row>
       <v-col cols="12" md="8">
         <div class="text-h2 text-center font-weight-bold">
-          Teka Teki Siroh
+          Tentang Siroh
         </div>
         <div class="text-h6 text-center">
           Diulang-ulang biar gak lupa
@@ -24,7 +24,7 @@ const doStart = () => {
       </v-col>
       <v-col cols="12" md="4">
         <v-btn block size="x-large" variant="flat" class="font-weight-bold bg-purple" @click="doStart()">
-          mulai
+          Soal
         </v-btn>
       </v-col>
     </v-row>

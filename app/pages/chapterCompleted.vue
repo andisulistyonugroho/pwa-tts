@@ -18,9 +18,9 @@ if (!selectedQuiz.value) {
   navigateTo('/topics', { replace: true })
 }
 
-const topic = computed(() => {
-  const found = userPoint.value?.find(obj => obj.topic_id === topicDetail.value.id)
-  return found
+const topic = computed<UserPoint>(() => {
+  const found = userPoint.value.find(obj => obj.topic_id === topicDetail.value.id)
+  return found ? found : { topic_id: 0, topic_title: '', quiz_point: [] }
 })
 
 const result = computed(() => {
@@ -102,8 +102,7 @@ const closeScoreBoard = () => {
           <template v-if="result && result.num_of_question > 0 && result?.correct_answer === result?.num_of_question">
             <div class="px-12">
               <v-form ref="form">
-                <v-text-field v-model="playername" label="Nama Kamu"
-                  :rules="[(v: any) => !!v || 'Harus diisi']"></v-text-field>
+                <v-text-field v-model="playername" label="Nama Kamu" :rules="[(v: any) => !!v || 'Harus diisi']" />
               </v-form>
             </div>
             <v-btn size="x-large" class="text-h4" append-icon="i-mdi-content-save"
