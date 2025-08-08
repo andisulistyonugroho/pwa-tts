@@ -3,23 +3,10 @@ definePageMeta({
   layout: "empty",
 });
 
-const { $bus, $debounce } = useNuxtApp();
+const { $bus } = useNuxtApp();
 
 const { getTopics } = useQuizStore();
-const { topics, topicDetail } = storeToRefs(useQuizStore());
-
-const openTopic = $debounce(
-  (input: { id: number; title: string }) => {
-    try {
-      topicDetail.value = { id: input.id, title: input.title };
-      navigateTo("/quiz");
-    } catch (error) {
-      alert(error);
-    }
-  },
-  1000,
-  { leading: true, trailing: false },
-);
+const { topics } = storeToRefs(useQuizStore());
 
 $bus.$emit("set-header", "Topik");
 getTopics();
@@ -35,7 +22,7 @@ getTopics();
           rounded="lg"
           class="px-3 py-4 mb-2"
           color="grey-darken-2"
-          :to="`/quiz?quizid=${row.id}`"
+          :to="`/quiz?topicid=${row.id}`"
         >
           <v-row class="flex-nowrap" no-gutters>
             <v-col cols="11" class="flex-grow-1 flex-shrink-0 text-h6">

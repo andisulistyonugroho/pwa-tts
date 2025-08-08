@@ -6,15 +6,18 @@ definePageMeta({
 const { $bus, $debounce } = useNuxtApp();
 const route = useRoute();
 
-const { getQuizzes } = useQuizStore();
+const { getQuizzes, getTopicDetail } = useQuizStore();
 const { quizzes, topicDetail, selectedQuiz } = storeToRefs(useQuizStore());
 const { InitializePointForTopic } = usePointStore();
 const { userPoint } = storeToRefs(usePointStore());
 const { getQuestionsByLevel } = useQuestionStore();
-const queryQuizId = route.query.quizid;
-let quizId = 0;
-if (typeof queryQuizId === "string") {
-  quizId = parseInt(queryQuizId);
+const queryTopicId = route.query.topicid;
+
+const dialog = ref(false);
+
+let topicId = 0;
+if (typeof queryTopicId === "string") {
+  topicId = parseInt(queryTopicId);
 }
 
 const quizIsOpen = (id: number) => {
@@ -42,15 +45,24 @@ const openQuiz = $debounce(
   { leading: true, trailing: false },
 );
 
+const start1stQuiz = () => {
+  dialog.value = false;
+};
+
 $bus.$emit("set-header", "Chapter");
 
-await getQuizzes(quizId);
+await getTopicDetail(topicId);
+await getQuizzes(topicId);
 
-InitializePointForTopic({
-  topic_id: topicDetail.value.id,
-  topic_title: topicDetail.value.title,
-  quizzes: quizzes.value,
-});
+if (userPoint.value.length === 0) {
+  dialog.value = true;
+}
+
+// InitializePointForTopic({
+//   topic_id: topicDetail.value.id,
+//   topic_title: topicDetail.value.title,
+//   quizzes: quizzes.value,
+// });
 </script>
 <template>
   <v-container fluid class="bg-yellow-lighten-5 h-100">
@@ -97,4 +109,5 @@ InitializePointForTopic({
       </v-col>
     </v-row>
   </v-container>
+  <LazyBeforeStart :dialog="dialog" @start="start1stQuiz()" />
 </template>

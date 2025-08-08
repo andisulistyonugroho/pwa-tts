@@ -49,10 +49,21 @@ export const useQuizStore = defineStore("quiz", () => {
     const nextQuiz = quizzes.value[index + 1];
   };
 
+  const getTopicDetail = async (id: number) => {
+    try {
+      const { data } = await $api.get(`/topics/${id}`);
+      topicDetail.value = data;
+      return Promise.resolve();
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
+
   return {
     getQuizzes,
     deleteAccount,
     getTopics,
+    getTopicDetail,
     openNextQuiz,
     quizzes,
     topics,
