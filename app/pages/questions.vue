@@ -11,7 +11,7 @@ const { questions } = storeToRefs(useQuestionStore());
 const { AddPoint, Skip, chaptersTotalTimeUpdate, ResetChapterPoint } =
   usePointStore();
 const { totalPoint } = storeToRefs(usePointStore());
-const { chapters, chapterStartTime, chapterEndTime } =
+const { chapter, chapters, chapterStartTime, chapterEndTime } =
   storeToRefs(useChapterStore());
 
 const querychapterId = route.query.chapterid;
@@ -59,7 +59,7 @@ const checkTheAnswer = $debounce(
       (obj) => obj.id === id && obj.is_correct === true,
     );
     if (index >= 0) {
-      AddPoint(questions.value[0].chapter_id);
+      AddPoint(chapterId);
     } else {
       wrongOptionId.value = id;
     }
@@ -82,13 +82,14 @@ const nextQuestion = $debounce(
     if (questionIndex.value < numberOfQuestion.value - 1) {
       questionIndex.value += 1;
     } else {
-      const nextLevel = questions.value[0].the_level + 1;
-      if (nextLevel > chapters.value.num_of_level) {
+      const nextLevel = question.value.the_level + 1;
+      const nol = chapter.value ? chapter.value.num_of_level : 1;
+      if (nextLevel > nol) {
         navigateTo("/chapterCompleted", { replace: true });
         return;
       }
 
-      await getQuestionsByLevel(chapters.value.id, nextLevel);
+      await getQuestionsByLevel(chapterId, nextLevel);
       randomizeQuestion();
       questionIndex.value = 0;
     }
@@ -110,15 +111,10 @@ const exitchapters = $debounce(
 );
 
 const checkChaptersEndTime = () => {
-  if (!chapters.value) return;
-
-  const nextLevel = questions.value[0].the_level + 1;
-  if (
-    questionIndex.value === numberOfQuestion.value - 1 &&
-    nextLevel > chapters.value.num_of_level
-  ) {
+  const nextLevel = question.value.the_level + 1;
+  const nol = chapter.value ? chapter.value.num_of_level : 1;
+  if (questionIndex.value === numberOfQuestion.value - 1 && nextLevel > nol) {
     chapterEndTime.value = $dayjs();
-
     chaptersTotalTimeUpdate(chapterStartTime.value, chapterEndTime.value);
   }
 };
@@ -170,10 +166,8 @@ const repeatQuestion = () => {
 };
 
 const skipQuestion = () => {
-  if (!chapters.value) return;
-
   answerBox.value = timesupD.value = false;
-  Skip(chapters.value.id);
+  Skip(chapterId);
   nextQuestion();
 };
 
@@ -214,6 +208,7 @@ const addMoreTime = () => {
 };
 
 randomizeQuestion();
+chapter.value = chapters.value.find((obj) => obj.id === chapterId);
 chapterStartTime.value = $dayjs();
 </script>
 <template>
