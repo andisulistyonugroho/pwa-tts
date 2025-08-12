@@ -3,22 +3,22 @@
 // computed()s become getters
 // function()s become actions
 import { Dayjs } from "dayjs";
-export const useQuizStore = defineStore("quiz", () => {
+export const useChapterStore = defineStore("chapter", () => {
   const { $api, $dayjs } = useNuxtApp();
 
   const topics = ref<Topic[]>([]);
   const topicDetail = ref<Topic>({ id: 0, title: "" });
 
-  const quizzes = ref<Quiz[]>([]);
-  const selectedQuiz = ref<Quiz>();
+  const chapters = ref<Chapter[]>([]);
+  const chapter = ref<Chapter>();
 
-  const quizStartTime = ref<Dayjs>($dayjs());
-  const quizEndTime = ref<Dayjs>($dayjs());
+  const chapterStartTime = ref<Dayjs>($dayjs());
+  const chapterEndTime = ref<Dayjs>($dayjs());
 
-  const getQuizzes = async (id: number) => {
+  const getChapters = async (id: number) => {
     try {
-      const { data } = await $api.get(`/topics/${id}/quiz`);
-      quizzes.value = data;
+      const { data } = await $api.get(`/topics/${id}/chapter`);
+      chapters.value = data;
       return Promise.resolve(true);
     } catch (error) {
       return Promise.reject(error);
@@ -44,9 +44,9 @@ export const useQuizStore = defineStore("quiz", () => {
     }
   };
 
-  const openNextQuiz = (quizId: number) => {
-    const index = quizzes.value.findIndex((obj) => obj.id === quizId);
-    const nextQuiz = quizzes.value[index + 1];
+  const openNextChapter = (chapterId: number) => {
+    const index = chapters.value.findIndex((obj) => obj.id === chapterId);
+    const nextchapters = chapters.value[index + 1];
   };
 
   const getTopicDetail = async (id: number) => {
@@ -59,17 +59,28 @@ export const useQuizStore = defineStore("quiz", () => {
     }
   };
 
+  const getChapterDetail = async (id: number) => {
+    try {
+      const { data } = await $api.get(`/chapter/${id}`);
+      chapters.value = data;
+      return Promise.resolve(true);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
+
   return {
-    getQuizzes,
+    getChapters,
     deleteAccount,
     getTopics,
     getTopicDetail,
-    openNextQuiz,
-    quizzes,
+    getChapterDetail,
+    openNextChapter,
+    chapters,
     topics,
     topicDetail,
-    selectedQuiz,
-    quizStartTime,
-    quizEndTime,
+    chapter,
+    chapterStartTime,
+    chapterEndTime,
   };
 });

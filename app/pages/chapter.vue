@@ -6,8 +6,8 @@ definePageMeta({
 const { $bus, $debounce } = useNuxtApp();
 const route = useRoute();
 
-const { getQuizzes, getTopicDetail } = useQuizStore();
-const { quizzes, topicDetail, selectedQuiz } = storeToRefs(useQuizStore());
+const { getChapters, getTopicDetail } = useChapterStore();
+const { chapter, topicDetail, chapters } = storeToRefs(useChapterStore());
 const { InitializePointForTopic } = usePointStore();
 const { userPoint } = storeToRefs(usePointStore());
 const { getQuestionsByLevel } = useQuestionStore();
@@ -20,22 +20,22 @@ if (typeof queryTopicId === "string") {
   topicId = parseInt(queryTopicId);
 }
 
-const quizIsOpen = (id: number) => {
+const chapterIsOpen = (id: number) => {
   const topic = userPoint.value?.find(
     (obj) => obj.topic_id === topicDetail.value.id,
   );
   if (topic) {
-    const found = topic.quiz_point.findIndex((obj) => obj.quiz_id === id);
+    const found = topic.chapter_point.findIndex((obj) => obj.chapter_id === id);
     return found >= 0;
   }
   return false;
 };
 
-const openQuiz = $debounce(
-  async (quiz: Quiz) => {
+const openChapters = $debounce(
+  async (chapter: Chapter) => {
     try {
-      selectedQuiz.value = quiz;
-      await getQuestionsByLevel(quiz.id, 1);
+      chapters.value = chapter;
+      await getQuestionsByLevel(chapter.id, 1);
       navigateTo("/questions", { replace: true });
     } catch (error) {
       alert(error);
@@ -45,14 +45,18 @@ const openQuiz = $debounce(
   { leading: true, trailing: false },
 );
 
-const start1stQuiz = () => {
+const start1stChapters = () => {
   dialog.value = false;
+  const firstChapter = chapters.value[0];
+  if (firstChapter) {
+    navigateTo(`/questions?chapterid=${firstChapter.id}`);
+  }
 };
 
 $bus.$emit("set-header", "Chapter");
 
 await getTopicDetail(topicId);
-await getQuizzes(topicId);
+await getChapters(topicId);
 
 if (userPoint.value.length === 0) {
   dialog.value = true;
@@ -61,7 +65,7 @@ if (userPoint.value.length === 0) {
 // InitializePointForTopic({
 //   topic_id: topicDetail.value.id,
 //   topic_title: topicDetail.value.title,
-//   quizzes: quizzes.value,
+//   chapters: chapters.value,
 // });
 </script>
 <template>
@@ -70,12 +74,12 @@ if (userPoint.value.length === 0) {
       <v-col cols="12" class="text-center text-h5">{{
         topicDetail.title
       }}</v-col>
-      <v-col v-if="quizzes" v-for="row in quizzes" cols="12" class="pb-0">
+      <v-col v-if="chapters" v-for="row in chapters" cols="12" class="pb-0">
         <v-card
-          v-if="quizIsOpen(row.id)"
+          v-if="chapterIsOpen(row.id)"
           rounded="lg"
           class="px-3 py-4 bg-yellow"
-          @click="openQuiz(row)"
+          @click="openChapters(row)"
         >
           <v-row class="flex-nowrap" no-gutters>
             <v-col cols="10" class="flex-grow-1 flex-shrink-0 text-h6">
@@ -109,5 +113,5 @@ if (userPoint.value.length === 0) {
       </v-col>
     </v-row>
   </v-container>
-  <LazyBeforeStart :dialog="dialog" @start="start1stQuiz()" />
+  <LazyBeforeStart :dialog="dialog" @start="start1stChapters()" />
 </template>

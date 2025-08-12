@@ -3,7 +3,7 @@ interface Topic {
   title: string;
 }
 
-interface Quiz {
+interface Chapter {
   id: number;
   title: string;
   num_of_level: number;
