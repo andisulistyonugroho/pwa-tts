@@ -123,34 +123,45 @@ const checkChaptersEndTime = () => {
   }
 };
 
-const question = computed<Question>(() => {
-  const rq = randomQuestion.value[questionIndex.value];
-  const q: Question = {
-    id: rq ? rq.id : 0,
-    chapter_id: rq ? rq.chapter_id : 0,
-    question_text: rq ? rq.question_text : "",
-    the_level: rq ? rq.the_level : 0,
-    options: rq ? rq.options : [],
-  };
-  return q;
+const question = computed<Question>({
+  get() {
+    const rq = randomQuestion.value[questionIndex.value];
+    const q: Question = {
+      id: rq ? rq.id : 0,
+      chapter_id: rq ? rq.chapter_id : 0,
+      question_text: rq ? rq.question_text : "",
+      the_level: rq ? rq.the_level : 0,
+      options: rq ? rq.options : [],
+    };
+    return q;
+  },
+  set(val) {
+    randomQuestion.value[questionIndex.value] = val;
+  },
 });
 
-const theOptions = computed<Option[]>(() => {
-  const opt: Option[] = [];
-  const y = [...question.value.options];
-  for (let i = y.length; i > 0; i--) {
-    const x = Math.floor(Math.random() * i);
-    const selected = y[x];
-    const randomOpt: Option = {
-      id: selected ? selected.id : 0,
-      the_text: selected ? selected.the_text : "",
-      is_correct: selected ? selected.is_correct : false,
-    };
-    opt.push(randomOpt);
-    y.splice(x, 1);
-  }
-
-  return opt;
+const theOptions = computed<Option[]>({
+  get() {
+    const opt: Option[] = [];
+    const y = [...question.value.options];
+    for (let i = y.length; i > 0; i--) {
+      const x = Math.floor(Math.random() * i);
+      const selected = y[x];
+      const randomOpt: Option = {
+        id: selected ? selected.id : 0,
+        the_text: selected ? selected.the_text : "",
+        is_correct: selected ? selected.is_correct : false,
+      };
+      opt.push(randomOpt);
+      y.splice(x, 1);
+    }
+    return opt;
+  },
+  set(val) {
+    const q = question.value;
+    q.options = val;
+    question.value = q;
+  },
 });
 
 const repeatQuestion = () => {
@@ -176,23 +187,24 @@ const timesupRepeat = () => {
 };
 
 const remove2Option = () => {
-  const theQuestion = randomQuestion.value[questionIndex.value];
-  const correctOne = theQuestion.options.find((obj) => obj.is_correct === true);
-  const wrongOne = theQuestion.options.find(
+  const correctOne = theOptions.value.find((obj) => obj.is_correct === true);
+  const wrongOne = theOptions.value.find(
     (obj) => obj.id === wrongOptionId.value,
   );
 
-  let arrIndexes = theQuestion.options.map((obj) => obj.id);
+  let arrIndexes = theOptions.value.map((obj) => obj.id);
   arrIndexes = arrIndexes.filter(
     (obj) => obj !== correctOne?.id && obj !== wrongOne?.id,
   );
 
   const one = correctOne;
-  const two = theQuestion.options.find((obj) => obj.id === arrIndexes[0]);
+  const two = theOptions.value.find((obj) => obj.id === arrIndexes[0]);
 
+  console.log("one:", one);
+  console.log("one:", two);
   if (!one || !two) return;
 
-  randomQuestion.value[questionIndex.value].options = [one, two];
+  theOptions.value = [one, two];
   repeatQuestion();
 };
 
@@ -235,6 +247,7 @@ chapterStartTime.value = $dayjs();
           {{ String.fromCharCode(65 + i) }}: {{ row.the_text }}
         </div>
       </v-col>
+      {{ theOptions }}
     </v-row>
     <v-footer v-if="questions.length" color="yellow-lighten-5">
       <v-btn
