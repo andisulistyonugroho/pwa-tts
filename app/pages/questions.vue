@@ -125,21 +125,28 @@ const checkChaptersEndTime = () => {
 
 const question = computed<Question>(() => {
   const rq = randomQuestion.value[questionIndex.value];
-  return {
+  const q: Question = {
     id: rq ? rq.id : 0,
     chapter_id: rq ? rq.chapter_id : 0,
     question_text: rq ? rq.question_text : "",
     the_level: rq ? rq.the_level : 0,
     options: rq ? rq.options : [],
   };
+  return q;
 });
 
-const theOptions = computed(() => {
-  const opt = [];
+const theOptions = computed<Option[]>(() => {
+  const opt: Option[] = [];
   const y = [...question.value.options];
   for (let i = y.length; i > 0; i--) {
     const x = Math.floor(Math.random() * i);
-    opt.push(y[x]);
+    const selected = y[x];
+    const randomOpt: Option = {
+      id: selected ? selected.id : 0,
+      the_text: selected ? selected.the_text : "",
+      is_correct: selected ? selected.is_correct : false,
+    };
+    opt.push(randomOpt);
     y.splice(x, 1);
   }
 
