@@ -32,10 +32,10 @@ const chapterIsOpen = (id: number) => {
 };
 
 const openChapters = $debounce(
-  async (chapter: Chapter) => {
+  async (ch: Chapter) => {
     try {
-      chapters.value = chapter;
-      await getQuestionsByLevel(chapter.id, 1);
+      chapter.value = ch;
+      await getQuestionsByLevel(ch.id, 1);
       navigateTo("/questions", { replace: true });
     } catch (error) {
       alert(error);
@@ -45,10 +45,11 @@ const openChapters = $debounce(
   { leading: true, trailing: false },
 );
 
-const start1stChapters = () => {
+const start1stChapters = async () => {
   dialog.value = false;
   const firstChapter = chapters.value[0];
   if (firstChapter) {
+    await getQuestionsByLevel(firstChapter.id, 1);
     navigateTo(`/questions?chapterid=${firstChapter.id}`);
   }
 };

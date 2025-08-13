@@ -62,7 +62,7 @@ export const useChapterStore = defineStore("chapter", () => {
   const getChapterDetail = async (id: number) => {
     try {
       const { data } = await $api.get(`/chapter/${id}`);
-      chapters.value = data;
+      chapter.value = data;
       return Promise.resolve(true);
     } catch (error) {
       return Promise.reject(error);

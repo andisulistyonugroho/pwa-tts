@@ -3,44 +3,54 @@
 // computed()s become getters
 // function()s become actions
 
-export const useRankinStore = defineStore('ranks', () => {
+export const useRankinStore = defineStore("ranks", () => {
+  const { $api } = useNuxtApp();
 
-  const { $api, $dayjs } = useNuxtApp()
-
-  const ranks = ref<Rank[]>([])
+  const ranks = ref<Rank[]>([]);
 
   const FreeSaveRecord = async (payload: Rank) => {
     try {
-      if (payload.playername === '' || payload.topic_id === 0 || payload.quiz_id === 0 || payload.total_point <= 0) return Promise.resolve(true)
+      if (
+        payload.playername === "" ||
+        payload.topic_id === 0 ||
+        payload.chapter_id === 0 ||
+        payload.total_point <= 0
+      )
+        return Promise.resolve(true);
 
-      await $api.post('/ranks', {
+      await $api.post("/ranks", {
         playername: payload.playername,
         topic_id: payload.topic_id,
-        quiz_id: payload.quiz_id,
-        point: payload.total_point
-      })
-      return Promise.resolve(true)
+        chapter_id: payload.chapter_id,
+        point: payload.total_point,
+      });
+      return Promise.resolve(true);
     } catch (error) {
-      return Promise.reject(error)
+      return Promise.reject(error);
     }
-  }
+  };
 
-  const GetFreeRecordInQuiz = async (payload: { topic_id: number, quiz_id: number }) => {
+  const GetFreeRecordInChapter = async (payload: {
+    topic_id: number;
+    chapter_id: number;
+  }) => {
     try {
-      const { data } = await $api.get('/ranks', {
+      const { data } = await $api.get("/ranks", {
         params: {
-          topic_id: payload.topic_id, quiz_id: payload.quiz_id
-        }
-      })
-      ranks.value = data
-      return Promise.resolve(true)
+          topic_id: payload.topic_id,
+          chapter_id: payload.chapter_id,
+        },
+      });
+      ranks.value = data;
+      return Promise.resolve(true);
     } catch (error) {
-      return Promise.reject(error)
+      return Promise.reject(error);
     }
-  }
+  };
 
   return {
-    FreeSaveRecord, GetFreeRecordInQuiz,
-    ranks
-  }
-})
+    FreeSaveRecord,
+    GetFreeRecordInChapter,
+    ranks,
+  };
+});

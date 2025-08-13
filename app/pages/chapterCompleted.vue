@@ -116,6 +116,8 @@ const closeScoreBoard = () => {
           <span class="text-h6 text-error mx-3">Salah {{ wrongAnswer }}</span>
         </div>
         <div class="mt-12">
+          {{ userPoint }}
+          {{ result }}
           <template
             v-if="
               result &&

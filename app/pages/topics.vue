@@ -5,8 +5,8 @@ definePageMeta({
 
 const { $bus } = useNuxtApp();
 
-const { getTopics } = useQuizStore();
-const { topics } = storeToRefs(useQuizStore());
+const { getTopics } = useChapterStore();
+const { topics } = storeToRefs(useChapterStore());
 
 $bus.$emit("set-header", "Topik");
 getTopics();
@@ -22,7 +22,7 @@ getTopics();
           rounded="lg"
           class="px-3 py-4 mb-2"
           color="grey-darken-2"
-          :to="`/quiz?topicid=${row.id}`"
+          :to="`/chapter?topicid=${row.id}`"
         >
           <v-row class="flex-nowrap" no-gutters>
             <v-col cols="11" class="flex-grow-1 flex-shrink-0 text-h6">
