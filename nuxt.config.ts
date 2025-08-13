@@ -1,5 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-const theVersion = "0.03";
+const theVersion = "0.04";
 export default defineNuxtConfig({
   compatibilityDate: "2025-05-15",
   devtools: { enabled: true },
@@ -392,8 +392,8 @@ export default defineNuxtConfig({
     storesDirs: ["./app/stores/**"],
   },
   storybook: {
-    url: "http://localhost:6006",
-    storybookRoute: "/__storybook__",
+    host: "http://localhost",
+    route: "/__storybook__",
     port: 6006,
   },
 });
