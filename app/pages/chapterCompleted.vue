@@ -4,17 +4,17 @@ definePageMeta({
 });
 const { $debounce } = useNuxtApp();
 
-const { ResetChaptersesPoint, NewChaptersPoint } = usePointStore();
+const { ResetChapterPoint, NewChapterPoint } = usePointStore();
 const { getQuestionsByLevel } = useQuestionStore();
 const { userPoint } = storeToRefs(usePointStore());
-const { chapters, topicDetail } = storeToRefs(useChapterStore());
+const { chapter, topicDetail } = storeToRefs(useChapterStore());
 const { FreeSaveRecord } = useRankinStore();
 
 const playername = ref("");
 const scoreboardDialog = ref(false);
 const form = ref();
 
-if (!chapters.value) {
+if (!chapter.value) {
   navigateTo("/topics", { replace: true });
 }
 
@@ -27,7 +27,7 @@ const topic = computed<UserPoint>(() => {
 
 const result = computed(() => {
   const point = topic.value?.chapter_point.find(
-    (obj) => obj.chapter_id === chapters.value?.id,
+    (obj) => obj.chapter_id === chapter.value?.id,
   );
 
   if (!point) {
@@ -46,7 +46,7 @@ const wrongAnswer = computed(() => {
 
 const getOut = $debounce(
   () => {
-    ResetChaptersesPoint();
+    ResetChapterPoint();
     navigateTo("/chapter", { replace: true });
   },
   1000,
@@ -56,8 +56,8 @@ const getOut = $debounce(
 const doRepeat = $debounce(
   async () => {
     ResetChapterPoint();
-    if (chapters.value) {
-      await getQuestionsByLevel(chapters.value.id, 1);
+    if (chapter.value) {
+      await getQuestionsByLevel(chapter.value.id, 1);
     }
     navigateTo("/questions", { replace: true });
   },
@@ -66,7 +66,7 @@ const doRepeat = $debounce(
 );
 
 const doNextChapter = () => {
-  NewChaptersPoint();
+  NewChapterPoint();
   navigateTo("/chapter", { replace: true });
 };
 
@@ -78,7 +78,7 @@ const beforeContinue = $debounce(
     const input: Rank = {
       playername: playername.value,
       topic_id: topic.value ? topic.value.topic_id : 0,
-      chapter_id: chapters.value ? chapters.value.id : 0,
+      chapter_id: chapter.value ? chapter.value.id : 0,
       total_point: result.value ? result.value.total_point : 0,
     };
     await FreeSaveRecord(input);
@@ -104,33 +104,66 @@ const closeScoreBoard = () => {
           </v-avatar>
         </div>
         <div class="text-h4">{{ topic?.topic_title }}</div>
-        <div class="text-h5">#{{ selectedQuiz?.title }}</div>
-        <div class="text-h6">Durasi: {{ toDuration(result ? result.total_time : 0) }}</div>
+        <div class="text-h5">#{{ chapter?.title }}</div>
+        <div class="text-h6">
+          Durasi: {{ toDuration(result ? result.total_time : 0) }}
+        </div>
         <div class="text-h6">Jumlah Soal: {{ result?.num_of_question }}</div>
         <div>
-          <span class="text-h6 text-green-darken-2 mx-3">Benar: {{ result?.correct_answer }}</span>
+          <span class="text-h6 text-green-darken-2 mx-3"
+            >Benar: {{ result?.correct_answer }}</span
+          >
           <span class="text-h6 text-error mx-3">Salah {{ wrongAnswer }}</span>
         </div>
         <div class="mt-12">
-          <template v-if="result && result.num_of_question > 0 && result?.correct_answer === result?.num_of_question">
+          <template
+            v-if="
+              result &&
+              result.num_of_question > 0 &&
+              result?.correct_answer === result?.num_of_question
+            "
+          >
             <div class="px-12">
               <v-form ref="form">
-                <v-text-field v-model="playername" label="Nama Kamu" :rules="[(v: any) => !!v || 'Harus diisi']" />
+                <v-text-field
+                  v-model="playername"
+                  label="Nama Kamu"
+                  :rules="[(v: any) => !!v || 'Harus diisi']"
+                />
               </v-form>
             </div>
-            <v-btn size="x-large" class="text-h4" append-icon="i-mdi-content-save"
-              @click="beforeContinue()">Simpan</v-btn>
+            <v-btn
+              size="x-large"
+              class="text-h4"
+              append-icon="i-mdi-content-save"
+              @click="beforeContinue()"
+              >Simpan</v-btn
+            >
           </template>
           <template v-else>
-            <v-btn size="x-large" class="text-h4" prepend-icon="i-mdi-chevron-double-left"
-              @click="getOut()">Keluar</v-btn>
-            <v-btn size="x-large" class="text-h4" prepend-icon="i-mdi-reload" @click="doRepeat()">Coba
-              lagi</v-btn>
+            <v-btn
+              size="x-large"
+              class="text-h4"
+              prepend-icon="i-mdi-chevron-double-left"
+              @click="getOut()"
+              >Keluar</v-btn
+            >
+            <v-btn
+              size="x-large"
+              class="text-h4"
+              prepend-icon="i-mdi-reload"
+              @click="doRepeat()"
+              >Coba lagi</v-btn
+            >
           </template>
         </div>
       </v-col>
     </v-row>
   </v-container>
-  <LazyScoreboard :dialog="scoreboardDialog" :topicid="topic?.topic_id" :quizid="result?.quiz_id"
-    @closeit="closeScoreBoard()" />
+  <LazyScoreboard
+    :dialog="scoreboardDialog"
+    :topicid="topic?.topic_id"
+    :chapterid="result?.chapter_id"
+    @closeit="closeScoreBoard()"
+  />
 </template>

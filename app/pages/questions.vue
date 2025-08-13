@@ -242,7 +242,6 @@ chapterStartTime.value = $dayjs();
           {{ String.fromCharCode(65 + i) }}: {{ row.the_text }}
         </div>
       </v-col>
-      {{ theOptions }}
     </v-row>
     <v-footer v-if="questions.length" color="yellow-lighten-5">
       <v-btn
