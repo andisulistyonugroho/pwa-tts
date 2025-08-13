@@ -100,11 +100,13 @@ const nextQuestion = $debounce(
   { leading: true, trailing: false },
 );
 
-const exitchapters = $debounce(
+const exitChapter = $debounce(
   () => {
     ResetChapterPoint();
     totalPoint.value = 0;
-    navigateTo("/chapter", { replace: true });
+    navigateTo(`/chapter?topicid=${chapter.value?.topic_id}`, {
+      replace: true,
+    });
   },
   1000,
   { leading: true, trailing: false },
@@ -250,7 +252,7 @@ chapterStartTime.value = $dayjs();
         color="pink"
         prepend-icon="i-mdi-exit-run"
         class="ma-3"
-        @click="exitchapters()"
+        @click="exitChapter()"
         >Keluar</v-btn
       >
       <v-spacer />

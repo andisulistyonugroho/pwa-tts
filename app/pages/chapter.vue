@@ -36,7 +36,7 @@ const openChapters = $debounce(
     try {
       chapter.value = ch;
       await getQuestionsByLevel(ch.id, 1);
-      navigateTo("/questions", { replace: true });
+      navigateTo(`/questions?chapterid=${ch.id}`, { replace: true });
     } catch (error) {
       alert(error);
     }
@@ -61,13 +61,12 @@ await getChapters(topicId);
 
 if (userPoint.value.length === 0) {
   dialog.value = true;
+  InitializePointForTopic({
+    topic_id: topicDetail.value.id,
+    topic_title: topicDetail.value.title,
+    chapters: chapters.value,
+  });
 }
-
-// InitializePointForTopic({
-//   topic_id: topicDetail.value.id,
-//   topic_title: topicDetail.value.title,
-//   chapters: chapters.value,
-// });
 </script>
 <template>
   <v-container fluid class="bg-yellow-lighten-5 h-100">

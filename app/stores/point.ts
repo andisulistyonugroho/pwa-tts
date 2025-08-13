@@ -15,7 +15,7 @@ export const usePointStore = defineStore("point", () => {
     chapters: Chapter[];
   }) => {
     const up = userPoint.value;
-    if (!up && input.topic_id >= 1) {
+    if (up.length === 0 && input.topic_id >= 1) {
       const firstchapters = input.chapters[0];
       userPoint.value = [
         {
