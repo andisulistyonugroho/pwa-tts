@@ -64,7 +64,7 @@ const toggleOpt = (id: number) => {
           >
         </div>
       </v-card-text>
-      <v-dialog v-model="scoreboardDialog">
+      <v-dialog v-model="scoreboardDialog" persistent>
         <LazyScoreboard
           :topicid="props.topicid"
           @closeit="scoreboardDialog = false"

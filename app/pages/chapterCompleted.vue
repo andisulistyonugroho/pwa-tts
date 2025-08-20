@@ -139,7 +139,7 @@ const closeScoreBoard = () => {
             </div>
             <v-btn
               block
-              size="x-large"
+              size="large"
               class="text-h4 mb-4"
               color="teal"
               prepend-icon="i-mdi-content-save"
@@ -148,7 +148,7 @@ const closeScoreBoard = () => {
             >
             <v-btn
               block
-              size="x-large"
+              size="large"
               class="text-h4"
               color="purple"
               prepend-icon="i-mdi-reload"
@@ -157,7 +157,7 @@ const closeScoreBoard = () => {
             >
             <v-btn
               block
-              size="x-large"
+              size="large"
               class="text-h4 mt-3"
               color="pink"
               append-icon="i-mdi-chevron-double-right"

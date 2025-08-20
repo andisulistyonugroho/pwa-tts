@@ -7,6 +7,7 @@ export const useRankinStore = defineStore("ranks", () => {
   const { $api } = useNuxtApp();
 
   const ranks = ref<Rank[]>([]);
+  const numOfQuestions = ref<number>(0);
 
   const FreeSaveRecord = async (payload: Rank) => {
     try {
@@ -32,7 +33,7 @@ export const useRankinStore = defineStore("ranks", () => {
     }
   };
 
-  const GetFreeRecordInChapter = async (payload: {
+  const GetFreeRecord = async (payload: {
     topic_id: number;
     chapter_id: number;
   }) => {
@@ -50,9 +51,32 @@ export const useRankinStore = defineStore("ranks", () => {
     }
   };
 
+  const CountQuestionInTopic = async (topic_id: number) => {
+    try {
+      const { data } = await $api.get(`/topics/${topic_id}/countQuestion`);
+      numOfQuestions.value = data.count;
+      return Promise.resolve(true);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
+
+  const CountQuestionInChapter = async (chapter_id: number) => {
+    try {
+      const { data } = await $api.get(`/chapter/${chapter_id}/countQuestion`);
+      numOfQuestions.value = data.count;
+      return Promise.resolve(true);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
+
   return {
     FreeSaveRecord,
-    GetFreeRecordInChapter,
+    GetFreeRecord,
+    CountQuestionInTopic,
+    CountQuestionInChapter,
     ranks,
+    numOfQuestions,
   };
 });
