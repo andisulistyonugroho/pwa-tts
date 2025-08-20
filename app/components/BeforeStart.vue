@@ -2,10 +2,12 @@
 const { $debounce } = useNuxtApp();
 const props = defineProps({
   dialog: Boolean,
+  topicid: Number,
 });
 
 const emit = defineEmits(["start"]);
 const opti = ref(0);
+const scoreboardDialog = ref(false);
 
 const doStart = $debounce(
   () => {
@@ -44,7 +46,12 @@ const toggleOpt = (id: number) => {
               </li>
             </ul>
           </div>
-          <v-btn block class="mt-2" color="purple" variant="tonal"
+          <v-btn
+            block
+            class="mt-2"
+            color="purple"
+            variant="tonal"
+            @click="scoreboardDialog = true"
             >Top Skor</v-btn
           >
           <v-btn
@@ -57,6 +64,12 @@ const toggleOpt = (id: number) => {
           >
         </div>
       </v-card-text>
+      <v-dialog v-model="scoreboardDialog">
+        <LazyScoreboard
+          :topicid="props.topicid"
+          @closeit="scoreboardDialog = false"
+        />
+      </v-dialog>
     </v-card>
   </v-dialog>
 </template>

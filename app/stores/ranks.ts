@@ -14,7 +14,8 @@ export const useRankinStore = defineStore("ranks", () => {
         payload.playername === "" ||
         payload.topic_id === 0 ||
         payload.chapter_id === 0 ||
-        payload.total_point <= 0
+        payload.total_point <= 0 ||
+        payload.total_time <= 0
       )
         return Promise.resolve(true);
 
@@ -22,7 +23,8 @@ export const useRankinStore = defineStore("ranks", () => {
         playername: payload.playername,
         topic_id: payload.topic_id,
         chapter_id: payload.chapter_id,
-        point: payload.total_point,
+        total_point: payload.total_point,
+        total_time: payload.total_time,
       });
       return Promise.resolve(true);
     } catch (error) {

@@ -57,6 +57,10 @@ const start1stChapters = async () => {
 $bus.$emit("set-header", "Chapter");
 
 await getTopicDetail(topicId);
+if (!topicDetail.value.id) {
+  navigateTo("/topics", { replace: true });
+}
+
 await getChapters(topicId);
 
 if (userPoint.value.length === 0) {
@@ -113,5 +117,9 @@ if (userPoint.value.length === 0) {
       </v-col>
     </v-row>
   </v-container>
-  <LazyBeforeStart :dialog="dialog" @start="start1stChapters()" />
+  <LazyBeforeStart
+    :dialog="dialog"
+    :topicid="topicId"
+    @start="start1stChapters()"
+  />
 </template>

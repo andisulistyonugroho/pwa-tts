@@ -47,7 +47,7 @@ const wrongAnswer = computed(() => {
 const getOut = $debounce(
   () => {
     ResetChapterPoint();
-    navigateTo("/chapter", { replace: true });
+    navigateTo("/topics", { replace: true });
   },
   1000,
   { leading: true, trailing: false },
@@ -59,7 +59,7 @@ const doRepeat = $debounce(
     if (chapter.value) {
       await getQuestionsByLevel(chapter.value.id, 1);
     }
-    navigateTo("/questions", { replace: true });
+    navigateTo(`/questions?chapterid=${chapter.value?.id}`, { replace: true });
   },
   1000,
   { leading: true, trailing: false },
@@ -67,7 +67,7 @@ const doRepeat = $debounce(
 
 const doNextChapter = () => {
   NewChapterPoint();
-  navigateTo("/chapter", { replace: true });
+  navigateTo(`/chapter?topicid=${topic.value.topic_id}`, { replace: true });
 };
 
 const beforeContinue = $debounce(
@@ -80,6 +80,7 @@ const beforeContinue = $debounce(
       topic_id: topic.value ? topic.value.topic_id : 0,
       chapter_id: chapter.value ? chapter.value.id : 0,
       total_point: result.value ? result.value.total_point : 0,
+      total_time: result.value ? result.value.total_time : 0,
     };
     await FreeSaveRecord(input);
     scoreboardDialog.value = true;
@@ -116,8 +117,6 @@ const closeScoreBoard = () => {
           <span class="text-h6 text-error mx-3">Salah {{ wrongAnswer }}</span>
         </div>
         <div class="mt-12">
-          {{ userPoint }}
-          {{ result }}
           <template
             v-if="
               result &&
@@ -130,29 +129,57 @@ const closeScoreBoard = () => {
                 <v-text-field
                   v-model="playername"
                   label="Nama Kamu"
+                  variant="outlined"
+                  placeholder="Masukkan nama kamu"
+                  persistent-placeholder
+                  class="bg-white"
                   :rules="[(v: any) => !!v || 'Harus diisi']"
                 />
               </v-form>
             </div>
             <v-btn
+              block
               size="x-large"
-              class="text-h4"
-              append-icon="i-mdi-content-save"
+              class="text-h4 mb-4"
+              color="teal"
+              prepend-icon="i-mdi-content-save"
               @click="beforeContinue()"
               >Simpan</v-btn
+            >
+            <v-btn
+              block
+              size="x-large"
+              class="text-h4"
+              color="purple"
+              prepend-icon="i-mdi-reload"
+              @click="doRepeat()"
+              >Coba lagi</v-btn
+            >
+            <v-btn
+              block
+              size="x-large"
+              class="text-h4 mt-3"
+              color="pink"
+              append-icon="i-mdi-chevron-double-right"
+              @click="doRepeat()"
+              >Skip</v-btn
             >
           </template>
           <template v-else>
             <v-btn
+              block
               size="x-large"
-              class="text-h4"
-              prepend-icon="i-mdi-chevron-double-left"
+              class="text-h4 mb-4"
+              prepend-icon="i-mdi-exit-run"
+              color="pink"
               @click="getOut()"
               >Keluar</v-btn
             >
             <v-btn
+              block
               size="x-large"
               class="text-h4"
+              color="purple"
               prepend-icon="i-mdi-reload"
               @click="doRepeat()"
               >Coba lagi</v-btn
@@ -162,10 +189,11 @@ const closeScoreBoard = () => {
       </v-col>
     </v-row>
   </v-container>
-  <LazyScoreboard
-    :dialog="scoreboardDialog"
-    :topicid="topic?.topic_id"
-    :chapterid="result?.chapter_id"
-    @closeit="closeScoreBoard()"
-  />
+  <v-dialog v-model="scoreboardDialog">
+    <LazyScoreboard
+      :topicid="topic?.topic_id"
+      :chapterid="result?.chapter_id"
+      @closeit="closeScoreBoard()"
+    />
+  </v-dialog>
 </template>
