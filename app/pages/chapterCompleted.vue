@@ -97,7 +97,7 @@ const closeScoreBoard = () => {
 <template>
   <v-container fluid class="px-2 fill-height bg-yellow-lighten-5">
     <v-row>
-      <v-col cols="12" class="text-center">
+      <v-col cols="12" md="4" class="text-center">
         <div class="text-h3">Poin Kamu</div>
         <div class="my-10 text-h1">
           <v-avatar color="info" size="150">
@@ -124,7 +124,7 @@ const closeScoreBoard = () => {
               result?.correct_answer === result?.num_of_question
             "
           >
-            <div class="px-12">
+            <div class="">
               <v-form ref="form">
                 <v-text-field
                   v-model="playername"
@@ -132,7 +132,7 @@ const closeScoreBoard = () => {
                   variant="outlined"
                   placeholder="Masukkan nama kamu"
                   persistent-placeholder
-                  class="bg-white"
+                  bg-color="white"
                   :rules="[(v: any) => !!v || 'Harus diisi']"
                 />
               </v-form>
@@ -142,28 +142,28 @@ const closeScoreBoard = () => {
               size="large"
               class="text-h4 mb-4"
               color="teal"
-              prepend-icon="i-mdi-content-save"
+              append-icon="i-mdi-content-save-outline"
               @click="beforeContinue()"
-              >Simpan</v-btn
-            >
+              >Simpan
+            </v-btn>
             <v-btn
               block
               size="large"
-              class="text-h4"
+              class="text-h5"
               color="purple"
-              prepend-icon="i-mdi-reload"
+              append-icon="i-mdi-restore"
               @click="doRepeat()"
-              >Coba lagi</v-btn
-            >
+              >Coba lagi
+            </v-btn>
             <v-btn
               block
               size="large"
-              class="text-h4 mt-3"
+              class="text-h5 mt-3"
               color="pink"
               append-icon="i-mdi-chevron-double-right"
               @click="doRepeat()"
-              >Skip</v-btn
-            >
+              >Skip
+            </v-btn>
           </template>
           <template v-else>
             <v-btn

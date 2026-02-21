@@ -6,7 +6,7 @@ definePageMeta({
 const { $debounce, $dayjs } = useNuxtApp();
 const route = useRoute();
 
-const { getQuestionsByLevel } = useQuestionStore();
+const { getQuestionsByLevel, questionCheckAnswer } = useQuestionStore();
 const { questions } = storeToRefs(useQuestionStore());
 const { AddPoint, Skip, chaptersTotalTimeUpdate, ResetChapterPoint } =
   usePointStore();
@@ -50,14 +50,12 @@ const randomizeQuestion = () => {
 };
 
 const checkTheAnswer = $debounce(
-  (id: number) => {
+  async (id: number) => {
     // pause counter
     counter.value.pauseCount();
 
     selectedOpt.value = id;
-    const index = theOptions.value.findIndex(
-      (obj) => obj.id === id && obj.is_correct === true,
-    );
+    const index = await questionCheckAnswer(id);
     if (index >= 0) {
       AddPoint(chapterId);
     } else {

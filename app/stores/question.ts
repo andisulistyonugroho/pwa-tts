@@ -23,5 +23,16 @@ export const useQuestionStore = defineStore("question", () => {
     }
   };
 
-  return { getQuestionsByLevel, questions, numOfQuestion };
+  const questionCheckAnswer = async (answerId: number) => {
+    try {
+      const { data } = await $api.post(`/chapter/checkAnswer`, {
+        id: answerId,
+      });
+      return Promise.resolve(data);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
+
+  return { getQuestionsByLevel, questionCheckAnswer, questions, numOfQuestion };
 });
