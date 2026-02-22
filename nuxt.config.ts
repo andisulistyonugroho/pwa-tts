@@ -19,9 +19,9 @@ export default defineNuxtConfig({
     head: {
       charset: "utf-16",
       viewport: "width=device-width, initial-scale=1",
-      title: "TentangSiroh",
+      title: "Kuis Ramadhan",
       meta: [
-        { name: "description", content: "TentangSiroh" },
+        { name: "description", content: "Kuis Ramadhan" },
         { name: "apple-mobile-web-app-capable", content: "yes" },
         { name: "mobile-web-app-capable", content: "yes" },
       ],
