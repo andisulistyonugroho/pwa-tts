@@ -51,7 +51,7 @@ const topScorer = computed(() => {
     <div class="text-h4 text-center">Papan Skor</div>
     <div class="text-center text-h6">
       #Posisi. Nama
-      <v-icon icon="i-mdi-timer-outline" />Durasi
+      <v-icon icon="i-mdi-timer-outline" />Waktu
       <v-icon icon="i-mdi-medal" />Poin
     </div>
     <div v-for="(row, i) in topScorer" class="my-1 mx-4">

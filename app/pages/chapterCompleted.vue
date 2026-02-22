@@ -9,8 +9,9 @@ const { getQuestionsByLevel } = useQuestionStore();
 const { userPoint } = storeToRefs(usePointStore());
 const { chapter, topicDetail } = storeToRefs(useChapterStore());
 const { FreeSaveRecord } = useRankinStore();
+const { player } = storeToRefs(useRankinStore());
 
-const playername = ref("");
+const playername = ref(player.value.name);
 const scoreboardDialog = ref(false);
 const form = ref();
 
@@ -107,7 +108,7 @@ const closeScoreBoard = () => {
         <div class="text-h4">{{ topic?.topic_title }}</div>
         <div class="text-h5">#{{ chapter?.title }}</div>
         <div class="text-h6">
-          Durasi: {{ toDuration(result ? result.total_time : 0) }}
+          Waktu: {{ toDuration(result ? result.total_time : 0) }}
         </div>
         <div class="text-h6">Jumlah Soal: {{ result?.num_of_question }}</div>
         <div>
@@ -134,6 +135,7 @@ const closeScoreBoard = () => {
                   persistent-placeholder
                   bg-color="white"
                   :rules="[(v: any) => !!v || 'Harus diisi']"
+                  :readonly="player.id !== '-'"
                 />
               </v-form>
             </div>
@@ -155,26 +157,8 @@ const closeScoreBoard = () => {
               @click="doRepeat()"
               >Coba lagi
             </v-btn>
-            <v-btn
-              block
-              size="large"
-              class="text-h5 mt-3"
-              color="pink"
-              append-icon="i-mdi-chevron-double-right"
-              @click="doRepeat()"
-              >Skip
-            </v-btn>
           </template>
           <template v-else>
-            <v-btn
-              block
-              size="x-large"
-              class="text-h4 mb-4"
-              prepend-icon="i-mdi-exit-run"
-              color="pink"
-              @click="getOut()"
-              >Keluar</v-btn
-            >
             <v-btn
               block
               size="x-large"
@@ -184,12 +168,21 @@ const closeScoreBoard = () => {
               @click="doRepeat()"
               >Coba lagi</v-btn
             >
+            <v-btn
+              block
+              size="large"
+              class="mt-4"
+              prepend-icon="i-mdi-exit-run"
+              color="grey"
+              @click="getOut()"
+              >Keluar</v-btn
+            >
           </template>
         </div>
       </v-col>
     </v-row>
   </v-container>
-  <v-dialog v-model="scoreboardDialog">
+  <v-dialog v-model="scoreboardDialog" fullscreen>
     <LazyScoreboard
       :topicid="topic?.topic_id"
       :chapterid="result?.chapter_id"

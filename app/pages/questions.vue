@@ -53,15 +53,15 @@ const checkTheAnswer = $debounce(
   async (id: number) => {
     // pause counter
     counter.value.pauseCount();
-
     selectedOpt.value = id;
     const index = await questionCheckAnswer(id);
-    if (index >= 0) {
+
+    if (index === true) {
       AddPoint(chapterId);
     } else {
       wrongOptionId.value = id;
     }
-    answerState.value = index >= 0;
+    answerState.value = index;
     answerBox.value = true;
 
     checkChaptersEndTime();

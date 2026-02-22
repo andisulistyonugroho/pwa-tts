@@ -22,7 +22,7 @@ const toggleOpt = (id: number) => {
 };
 </script>
 <template>
-  <v-dialog v-model="props.dialog" persistent max-width="300">
+  <v-dialog v-model="props.dialog" persistent max-width="600">
     <v-card>
       <v-card-text>
         <div>
@@ -31,40 +31,45 @@ const toggleOpt = (id: number) => {
             class="mt-5"
             color="purple"
             variant="tonal"
+            size="large"
             @click="toggleOpt(1)"
             >Aturan Permainan</v-btn
           >
           <div v-show="opti === 1" class="px-4 py-2">
             <ul class="text-left">
-              <li>Jawaban benar +1 poin</li>
-              <li>Jawaban salah bisa diulang 1 kali, selagi ada waktu</li>
-              <li>50/50: -2 poin</li>
-              <li>Tambah 10 detik: -1 poin</li>
+              <li>Jawaban benar +1 poin.</li>
+              <li>Jika salah bisa diulang 1 kali, selagi ada waktu.</li>
+              <li>50:50, -2 poin.</li>
+              <li>Tambah 10 detik, -1 poin.</li>
+              <li>Phone a friend, tanya ayah bunda? boleh.</li>
+              <li>Sambil buka buku? boleh.</li>
+              <li>Tanya ke AI? mending kamu baca buku aja dulu.</li>
               <li>
                 Chapter berikutnya terbuka jika semua pertanyaan terjawab dengan
-                benar
+                benar.
               </li>
             </ul>
           </div>
-          <v-btn
+          <!-- <v-btn
             block
             class="mt-2"
             color="purple"
             variant="tonal"
             @click="scoreboardDialog = true"
             >Top Skor</v-btn
-          >
+          > -->
           <v-btn
             block
             class="mt-2"
             color="purple"
             variant="tonal"
+            size="large"
             @click="doStart()"
             >Mulai</v-btn
           >
         </div>
       </v-card-text>
-      <v-dialog v-model="scoreboardDialog" persistent>
+      <v-dialog v-model="scoreboardDialog" persistent fullscreen>
         <LazyScoreboard
           :topicid="props.topicid"
           @closeit="scoreboardDialog = false"

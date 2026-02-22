@@ -1,4 +1,5 @@
 interface Rank {
+  player_id: string;
   playername: string;
   topic_id: number;
   chapter_id: number;
