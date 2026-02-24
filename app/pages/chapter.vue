@@ -8,7 +8,7 @@ const route = useRoute();
 
 const { getChapters, getTopicDetail } = useChapterStore();
 const { chapter, topicDetail, chapters } = storeToRefs(useChapterStore());
-const { InitializePointForTopic } = usePointStore();
+const { InitializePointForTopic, ResetChapterPoint } = usePointStore();
 const { userPoint } = storeToRefs(usePointStore());
 const { getQuestionsByLevel } = useQuestionStore();
 const { chapterOpened } = storeToRefs(useRankinStore());
@@ -30,6 +30,7 @@ const openChapters = $debounce(
   async (ch: Chapter) => {
     try {
       chapter.value = ch;
+      ResetChapterPoint();
       await getQuestionsByLevel(ch.id, 1);
       navigateTo(`/questions?chapterid=${ch.id}`, { replace: true });
     } catch (error) {
